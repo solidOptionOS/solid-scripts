@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Restarting Network";
+echo ""
+sleep 1
+echo "[sudo /etc/init.d/networking restart]";
+sudo /etc/init.d/networking restart
+sleep 1
+echo "[sudo /etc/init.d/network-manager restart]";
+sudo /etc/init.d/network-manager restart
+echo ""

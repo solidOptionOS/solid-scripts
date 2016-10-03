@@ -1,0 +1,15 @@
+#!/bin/bash
+echo -e "Nmap Microsoft Windows Network Recon"
+echo ""
+sleep 1
+
+echo -e "Enter IP [e.g. 192.168.1.0/24] "
+read ip
+echo ""
+
+echo -e "Running [nmap -p 445 --script smb-os-discovery $ip].."
+echo ""
+sleep 1
+
+nmap -p 445 --script smb-os-discovery $ip
+
