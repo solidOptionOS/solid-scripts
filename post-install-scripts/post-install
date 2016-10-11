@@ -75,7 +75,7 @@ aliases_default="Y"
 read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
 aliases=${aliases:-$aliases_default}
 
-if [[ $aliases = "aliases_default" || $aliases = 'Y' ]] ; then
+if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
 	
   echo ""
   echo -e $BLUE"Adding aliases to .bashrc.."$ENDCOLOR;

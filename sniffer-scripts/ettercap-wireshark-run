@@ -101,7 +101,7 @@ echo -e $BLUE"Capture interface set to '$interface'" $ENDCOLOR
 echo ""
 
 # Execute
-echo -e $GREEN"Execute command: [sudo ettercap $etterargs $arpremote $target_ip$target_host $plugins -V $visual_format -i $interface]? "$ENDCOLOR;
+echo -e $GREEN"Execute command: [sudo ettercap $etterargs $arpremote $target_ip//$target_host $plugins -V $visual_format -i $interface]? "$ENDCOLOR;
 read execute_command
 	
 
@@ -113,7 +113,7 @@ if [[ $execute_command = 'y' || $excute_command = 'Y' ]]; then
 
   wireshark -SKl -i $interface &>/dev/null &
   
-  x-terminal-emulator sudo ettercap $etterargs $arpremote $target_ip/$target_host $plugins -V $visual_format -i $interface
+  x-terminal-emulator sudo ettercap $etterargs $arpremote $target_ip//$target_host $plugins -V $visual_format -i $interface
   
 
   

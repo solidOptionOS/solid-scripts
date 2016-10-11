@@ -102,7 +102,7 @@ echo ""
 sleep 1
 echo -e $BLUE"Patching wfite-ng.."$ENDCOLOR;
 echo ""
-sudo cp $HOMEPATH/optionZ3ro/assets/wifite-ng-patch /usr/bin/wifite-ng
+sudo cp $HOMEPATH/solid-scripts/assets/wifite-ng-patch /usr/bin/wifite-ng
 sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite
 sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite
 sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite-ng
