@@ -58,7 +58,7 @@ if [[ $downloadArt = $downloadArt_default || $downloadArt = 'yes' || $downloadAr
 
   echo -e $BLUE"Adding $art_zero_alias to '$HOME/.bashrc'.."$ENDCOLOR;
   echo ""
-  echo "$art_zero_alias" >> $HOME/.bashrc
+  echo "$art_zero_alias" >> $HOME/.bash_aliases
   echo ""
 
   echo -e $CYAN"Complete. Enjoy!!"$ENDCOLOR;
