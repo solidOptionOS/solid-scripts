@@ -1,1 +1,1 @@
-alias xclip='xargs echo -n | xclip -selection clipboard -c'
+echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> ~/.bash_aliases
