@@ -36,8 +36,9 @@ echo ""
 echo -e $YELLOW"Thank you for choosing SolidOptionOS!"$ENDCOLOR;
 echo ""
 echo -e $YELLOW"This script will setup and run OpenVPN as a service/daemon."$ENDCOLOR;
-echo -e $YELLOW"Let's get started"$ENDCOLOR;
+echo -e $YELLOW"You must be root to use the script.  Logging in as root.."$ENDCOLOR;
 echo ""
+sudo su
 echo ""
 echo -e $YELLOW"Installing openvpn.."$ENDCOLOR;
 echo ""
