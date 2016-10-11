@@ -48,8 +48,9 @@ echo -e $YELLOW"Let's get started"$ENDCOLOR;
 echo ""
 echo ""
 
-echo -e $YELLOW"Please set your home path (leave out trailing /'s): [$grandparent] "$ENDCOLOR;
-read HOMEPATH
+homepath_default=$HOME
+read -p "Please set your home path (leave out trailing /'s): [$homepath_default] " homepath_default
+HOMEPATH=${HOMEPATH:-$homepath_default}
 echo ""
 echo -e $BLUE"Your home path is set to $HOMEPATH/."$ENDCOLOR;
 echo ""
@@ -71,7 +72,7 @@ else
 
 fi
 aliases_default="Y"
-read -p "Do you want to add custom alias to your bashrc? [$alias_default/n] " aliases_default
+read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
 aliases=${aliases:-$aliases_default}
 
 if [[ $aliases = "aliases_default" || $aliases = 'Y' ]] ; then
@@ -514,7 +515,7 @@ if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
 
 else
 
-  echo -e $BLUE"Okay. Maybe later."$ENDCOLOR;
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
   echo ""
 
@@ -626,7 +627,7 @@ if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
 
 else
   
-  echo -e $BLUE"Okay. Maybe later."$ENDCOLOR;
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
   echo ""
 
@@ -700,7 +701,7 @@ if [[ $java = "java_default" || $java = "y" ]] ; then
 
 else
 
-  echo -e $BLUE"Okay. Maybe later."$ENDCOLOR;
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
   echo ""
 
@@ -850,17 +851,17 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
 else
 
-  echo -e $BLUE"Okay, maybe later."$ENDCOLOR;
+  echo -e $YELLOW"Okay, maybe later."$ENDCOLOR;
   echo ""
   echo ""
 
 fi
 
-echo -e $YELLOW"Would you like to download SolidOptionOS artwork - Solid-Art? [y/n]"$ENDCOLOR;
+art_default="Y"
+read -p "Would you like to download SolidOptionOS artwork - Solid-Art? [$art_default/n] " art_default
+art=${art:-$art_default}
 
-read ARTWORK
-
-if [[ $ARTWORK = 'y' || $ARTWORK = 'Y' ]] ; then
+if [[ $art = "art_default" || $art = "y" ]] ; then
 	
   echo -e $BLUE"Creating Solid-Art folder in $HOMEPATH/Pictures.."$ENDCOLOR;
   echo ""
@@ -913,10 +914,11 @@ if [[ $ARTWORK = 'y' || $ARTWORK = 'Y' ]] ; then
  
   else
 
-    echo -e $BLUE"A Solid-Art folder already exists in $HOMEPATH/Pictures. Do you want to overwrite/merge it with a new download? "$ENDCOLOR;
-    read OVERWRITEART
+    overwrite_default="Y"	  
+    read -p "A Solid-Art folder already exists in $HOMEPATH/Pictures. Do you want to overwrite/merge it with a new download? [$overwrite_default,n] " overwrite_default
+    overwrite=${overwrite:-$overwrite_default}
 
-    if [[ $OVERWRITEART = 'y' || $OVERWRITEART = 'Y' ]] ; then
+    if [[ $overwrite = "overwrite_default" || $overwrite = "y" ]] ; then
 			
       sudo rm -rf $HOMEPATH/Pictures/Solid-Art/art-zero.zip
       mkdir -p $HOMEPATH/Pictures/Solid-Art
@@ -944,7 +946,7 @@ if [[ $ARTWORK = 'y' || $ARTWORK = 'Y' ]] ; then
  
     else
  
-      echo -e $BLUE"Okay. Skipping."$ENDCOLOR;
+      echo -e $YELLOW"Okay. Skipping."$ENDCOLOR;
       echo ""
       echo ""
   
@@ -954,15 +956,16 @@ if [[ $ARTWORK = 'y' || $ARTWORK = 'Y' ]] ; then
 
 else
   
-  echo -e $BLUE"Okay. Maybe later."$ENDCOLOR;
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
 
 fi
 
-echo -e $YELLOW"Would you like to upgrade your htop style? [y/n] "$ENDCOLOR;
-read HTOPUPGRADE
+htop_default="Y"
+read -p "Would you like to upgrade your htop style? [$htop_default/n] " htop_default
+htop=${htop:-$htop_default}
 
-if [[ $HTOPUPGRADE = 'y' || $HTOPUPGRADE = 'Y' ]] ; then
+if [[ $htop = "htop_default" || $htop = "y" ]] ; then
 
   echo -e $BLUE"Installing htop.."$ENDCOLOR;
   echo ""
@@ -985,15 +988,16 @@ if [[ $HTOPUPGRADE = 'y' || $HTOPUPGRADE = 'Y' ]] ; then
 
 else
 
-  echo -e $BLUE"Okay. Maybe later."$ENDCOLOR; 
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR; 
   echo ""
 
 fi
 
-echo -e $BLUE"Would you like to update ieee-data? This may take a long time depeding on your system. [y/n] "$ENDCOLOR;
-read OUIUPDATE
+oui_default="Y"
+read -p "Would you like to update ieee-data? This may take a long time depeding on your system. [$oui_default/n] " oui_default
+oui=${oui:-$oui_default}
 
-if [[ $OUIUPDATE = 'y' || $OUIUPDATE = 'Y' ]] ; then
+if [[ $oui = "oui_default" || $oui = "y" ]] ; then
 
   echo -e $BLUE"Updating.."$ENDCOLOR;
   echo ""
