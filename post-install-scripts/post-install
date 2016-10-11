@@ -41,7 +41,7 @@ echo -e $BLUE"#                                "$ENDCOLOR;
 echo ""
 echo -e $YELLOW"Thank you for choosing SolidOptionOS!"$ENDCOLOR;
 echo ""
-echo -e $YELLOW"This is a post installation script designed for the optionZ3ro drive or downloaded OS"$ENDCOLOR;
+echo -e $YELLOW"This is a post installation script designed for the solid-scripts drive or downloaded OS"$ENDCOLOR;
 echo -e $YELLOW" you either purchased or downloaded online to give you a simpler, more robust user experience with the OS and its tools."$ENDCOLOR;
 
 echo -e $YELLOW"Let's get started"$ENDCOLOR;
@@ -53,12 +53,13 @@ read HOMEPATH
 echo ""
 echo -e $BLUE"Your home path is set to $HOMEPATH/."$ENDCOLOR;
 echo ""
-echo -e $YELLOW"Copy optionZ3ro into $HOMEPATH? "$ENDCOLOR;
-read cpoption
+cpscript_default="N"
+read -p "Copy solid-scripts into $HOMEPATH? [$cpscript_default,y] " cpscript_default
+cpscript=${cpscript:-$cpscript_default}
 
-if [[ $cpoption = 'Y' || $cpoption = 'y' ]]; then
+if [[ $cpscript = 'Y' || $cpscript = 'y' ]]; then
 
-  echo -e $BLUE"Copying optionZero folder to $HOMEPATH.."$ENDCOLOR;
+  echo -e $BLUE"Copying solid-scripts folder to $HOMEPATH.."$ENDCOLOR;
   echo ""
   sudo cp -rf $parent $HOMEPATH
   echo ""
@@ -69,21 +70,20 @@ else
   echo ""
 
 fi
+aliases_default="Y"
+read -p "Do you want to add custom alias to your bashrc? [$alias_default/n] " aliases_default
+aliases=${aliases:-$aliases_default}
 
-echo -e $BLUE"Do you want to add custom alias to your bashrc? https://www.corporationwiki.com/p/2icpk6/stephen-earnhart[y/n] "$ENDCOLOR;
-
-read ADDALIASES
-
-if [[ $ADDALIASES = 'y' || $ADDALIASES = 'Y' ]] ; then
+if [[ $aliases = "aliases_default" || $aliases = 'Y' ]] ; then
 	
   echo ""
   echo -e $BLUE"Adding aliases to .bashrc.."$ENDCOLOR;
   echo ""
-  echo ""
-  echo "alias ll='ls -Al'" >> $HOMEPATH/.bashrc
-  echo "alias lz='ls -Zla'" >> $HOMEPATH/.bashrc
-  echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bashrc
-  echo "alias goto-optionZ3ro='cd $HOMEPATH/optionZ3ro/'" >> $HOMEPATH/.bashrc
+  touch $HOMEPATH/.bash_aliases
+  echo "alias ll='ls -Al'" >> $HOMEPATH/.bash_aliases
+  echo "alias lz='ls -Zla'" >> $HOMEPATH/.bash_aliases
+  echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
+  echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
   echo ""
 
 else
@@ -93,11 +93,11 @@ else
 
 fi
 
-nemanage_default="Y"
+netmanage_default="Y"
 read -p "Do you want to install Network-Manager and configure the interfaces for easy ifup ifdown? [$netmanage_default,n] " netmanage_default
 netmanage=${netmanage:-$netmanage_default}
 
-if [[ $netmanage = "$netmanage_default" || $netmanage = "y" ]] ; then
+if [[ $netmanage = "netmanage_default" || $netmanage = "y" ]] ; then
 
   echo -e $BLUE"Installing Network-Manager.."$ENDCOLOR;
   echo ""
@@ -121,12 +121,11 @@ else
   echo ""
 
 fi
+rolling_default="Y"
+read -p "Do you want to add Kali-Rolling to your sources? [$rolling_default/n]" rolling_default
+rolling=${rolling:-$rolling_default}
 
-echo -e $YELLOW"Do you want to add Kali-Rolling to your sources? [y/n]"$ENDCOLOR;
-
-read KALIROLLING
-
-if [[ $KALIROLLING = 'y' || $KALIROLLING = 'Y' ]] ; then
+if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
 
   echo ""
   echo -e $BLUE"Checking sources.list.."$ENDCOLOR;
@@ -148,15 +147,15 @@ if [[ $KALIROLLING = 'y' || $KALIROLLING = 'Y' ]] ; then
   echo ""
   echo ""
 sudo cat << EOF > /etc/apt/sources.list
-# Kali-Rolling Repos\n
-deb http://repo.kali.org/kali kali-rolling main contrib non-free\n
-deb-src http://repo.kali.org/kali kali-rolling main contrib non-free\n
-# Kali-Dev Repos\n
-deb http://repo.kali.org/kali kali-dev main contrib non-free\n
-deb-src http://repo.kali.org/kali kali-dev main contrib non-free\n
-# Kali-Bleeding-Edge\n
-#deb http://repo.kali.org/kali kali-bleeding-edge main contrib non-free\n
-#deb-src http://repo.kali.org/kali kali-bleeding-edge main contrib non-free\n
+# Kali-Rolling Repos
+deb http://repo.kali.org/kali kali-rolling main contrib non-free
+deb-src http://repo.kali.org/kali kali-rolling main contrib non-free
+# Kali-Dev Repos
+deb http://repo.kali.org/kali kali-dev main contrib non-free
+deb-src http://repo.kali.org/kali kali-dev main contrib non-free
+# Kali-Bleeding-Edge
+#deb http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
+#deb-src http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
 EOF
   echo ""
   echo ""
@@ -178,10 +177,31 @@ else
   echo ""
 
 fi
-echo -e $YELLOW"Do you want to install and configure openssh-server? "$ENDCOLOR;
-read INSTALLOPENSSH
+bleeding_default="Y"
+read -p "Do you want to enable Kali Bleeding-Edge Repos? [$bleeding_default,n] " bleeding_default
+bleeding=${bleeding:-$bleeding_default}
 
-if [[ $INSTALLOPENSSH = 'Y' || $INSTALLOPENSSH = 'y' ]]; then
+if [[ $bleeding = "bleeding_default" || $bleeding = "y" ]] ; then
+
+  sudo sed -i 's/\#deb\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+  sudo sed -i 's/\#deb\-src\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+  echo ""
+  cat /etc/apt/sources.list
+  echo ""
+
+else
+
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+  echo ""
+  echo""
+
+fi
+configopenssh_default="Y"
+read -p "Do you want to install and configure openssh-server? [$configopenssh_default,n] " configopenssh_default
+configopenssh=${configopenssh:-$configopenssh_default}
+
+
+if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
 
   echo -e $BLUE"Installing openssh-server.."$ENDCOLOR;
   echo ""
@@ -221,11 +241,12 @@ else
   echo ""
 
 fi
+multiarch_default="Y"
+read -p "Would you like to install and configure multiarch-support for i386? [$multiarch_default,n] " multiarch_default
+multiarch=${multiarch:-$multiarch_default}
 
-echo -e $YELLOW"Would you like to install and configure multiarch-support for i386? "$ENDCOLOR;
-read MULTIARCH
 
-if [[ $MULTIARCH = 'Y' || $MULTIARCH = 'y' ]]; then
+if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 
   echo -e $BLUE"Adding multiarch-support.."$ENDCOLOR;
   echo ""
@@ -247,11 +268,11 @@ else
   echo ""
 
 fi
+upandup_default="Y"
+read -p "Would you like to update and upgrade? [$upandup_default,n] " upandup_default
+upandup=${upandup:-$upandup_default}
 
-echo -e $YELLOW"Would you like to update and upgrade? "$ENDCOLOR;
-read UPANDUP
-
-if [[ $UPANDUP = 'Y' || $UPANDUP = 'y' ]]; then
+if [[ $upandup = "upandup_default" || $upandup = 'y' ]]; then
 
   echo -e $BLUE"Updating and upgrading.."$ENDCOLOR;
   echo ""
@@ -272,12 +293,11 @@ else
   echo ""
 
 fi
+extra_default="Y"
+read -p "Would you like to install some preferred extras? WARNING: IF YOU ARE NOT RUNNING KALI 2.0, THIS IS NOT RECOMMENDED. [$extra_default/n] " extra_default
+extra=${extra:-$extra_default}
 
-echo -e $YELLOW"Would you like to install some preferred extras? WARNING: IF YOU ARE NOT RUNNING KALI 2.0, THIS IS NOT RECOMMENDED. [y/n]"$ENDCOLOR;
-
-read EXTRAS
-
-if [[ $EXTRAS = 'y' || $EXTRAS = 'Y' ]] ; then
+if [[ $extra = "extra_default" || $extra = "y" ]] ; then
  
   echo -e $BLUE"Listing preferred extras.."$ENDCOLOR;
   echo ""
@@ -314,11 +334,11 @@ else
   echo ""
 
 fi 
+NEWUSER_DEFAULT="Y"
+read -p "Would you like to create a standard user? [$NEWUSER_DEFAULT/n] " NEWUSER_DEFAULT
+NEWUSER=${NEWUSER:-$NEWUSER_DEFAULT}
 
-echo -e $YELLOW"Would you like to create a standard user? [y/n] "$ENDCOLOR;
-read NEWUSER
-
-if [[ $NEWUSER = 'y' || $NEWUSER = 'y' ]] ; then 
+if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then 
 
   echo -e $YELLOW"Username: [enter username] "$ENDCOLOR;
   read USERNAME
@@ -370,16 +390,21 @@ if [[ $NEWUSER = 'y' || $NEWUSER = 'y' ]] ; then
   echo ""
   echo ""
 
-  echo -e $YELLOW"Time to set a password for $USERNAME.."$ENDCOLOR;
+ #  echo -e $BLUE"Adding $USERNAME to /etc/sudoers.."$ENDCOLOR;
+ #  sudo sed -i 's/\#\ Allow\ members\ of\ group\ sudo\ to\ execute\ any\ command/'$USERNAME'\	ALL\=\(ALL\:ALL\)\ ALL\' >> /etc/sudoers
+ #  echo ""
+ #  sudo cat /etc/sudoers
+
+  echo -e $YELLOW"Set a password for $USERNAME.."$ENDCOLOR;
   echo ""
   sudo passwd $USERNAME
   echo ""
   echo ""
-	
-  echo -e $YELLOW"Do you want to clone root .bashrc to $USERNAME .bashrc? [y/n] "$ENDCOLOR;
-  read CLONEBASHRC
+  clonebashrc_default="Y"	
+  read -p "Do you want to clone root .bashrc to $USERNAME .bashrc? [$clonebashrc_default/n] " clonebashrc_default
+  clonebashrc=${clonebashrc:-$clonebashrc_default}
 
-  if [[ $CLONEBASHRC = 'y' || $CLONEBASHRC = 'Y' ]] ; then 
+  if [[ $clonebashrc = "clonebashrc_default" || $clonebashrc = "y" ]] ; then 
 	
     echo -e $BLUE"Cloning /root/.bashrc to /home/$USERNAME/.bashrc.."$ENDCOLOR;
     echo ""
@@ -416,11 +441,11 @@ else
   echo ""
 
 fi
+addapt_default="Y"
+read -p "Would you like to install and configure add-apt-repository? [$addapt_default,n] " addapt_default
+addapt=${addapt:-$addapt_default}
 
-echo -e $YELLOW"Would you like to install and configure add-apt-repository? "$ENDCOLOR;
-read ADDAPTREPO
-
-if [[ $ADDAPTREPO = 'Y' || $ADDAPTREPO = 'y' ]] ; then
+if [[ $addapt = "addapt_default" || $addapt = "y" ]] ; then
 
   echo -e $BLUE"Installing and configuring add-apt-repository"$ENDCOLOR;
   echo ""
@@ -448,9 +473,9 @@ if [[ $ADDAPTREPO = 'Y' || $ADDAPTREPO = 'y' ]] ; then
   sudo apt-file search add-apt-repository
   echo ""
 
-  echo -e $BLUE"Modifying add-apt-repository with $HOMEPATH/optionZ3ro/assets/add-apt-repository in /usr/sbin.."$ENDCOLOR;
+  echo -e $BLUE"Modifying add-apt-repository with $HOMEPATH/solid-scripts/assets/add-apt-repository in /usr/sbin.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/optionZ3ro/assets/add-apt-repository /usr/sbin/add-apt-repository
+  sudo cp $HOMEPATH/solid-scripts/assets/add-apt-repository /usr/sbin/add-apt-repository
   sudo chmod o+x /usr/sbin/add-apt-repository
   sudo chown root:root /usr/sbin/add-apt-repository
   echo ""
@@ -464,12 +489,11 @@ else
   echo ""
 
 fi
+CUSTOMTHEMES_DEFAULT="Y"
+read -p "Would you like to install custom themes and icons? [$CUSTOMTHEMES_DEFAULT/n] " CUSTOMTHEMESE_DEFAULT
+CUSTOMTHEMES=${CUSTOMTHEMES:-$CUSTOMTHEMES_DEFAULT}
 
-echo -e $YELLOW"Would you like to install custom themes and icons? [y/n]"$ENDCOLOR;
-
-read CUSTOMTHEMES
-
-if [[ $CUSTOMTHEMES = 'y' || $CUSTOMTHEMES = 'Y' ]] ; then
+if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
 
   echo -e $BLUE"Adding ppa:noobslab/themes.."$ENDCOLOR;
   echo ""
@@ -495,12 +519,11 @@ else
   echo ""
 
 fi
+airmon_default="Y"
+read -p "Would you like to modify airmon-ng to create the classic monitor interfaces like mon0 instead of the new style like wlan0mon? [$airmon_default/n] " airmon_default
+airmon=${airmon:-$airmon_default}
 
-echo -e $YELLOW"Would you like to modify airmon-ng to create the classic monitor interfaces like mon0 instead of the new style like wlan0mon? [y/n]"$ENDCOLOR;
-
-read CONFAIRMON
-
-if [[ $CONFAIRMON = 'y' || $CONFAIRMON = 'Y' ]] ; then
+if [[ $airmon = "airmon_default" || $airmon = "y" ]] ; then
 
   echo ""
   echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
@@ -522,7 +545,7 @@ if [[ $CONFAIRMON = 'y' || $CONFAIRMON = 'Y' ]] ; then
     echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
     echo ""
     echo ""
-    sudo cp $HOMEPATH/optionZ3ro/assets/airmon-ng-old /usr/sbin/airmon-ng
+    sudo cp $HOMEPATH/solid-scripts/assets/airmon-ng-old /usr/sbin/airmon-ng
     sudo chown root:root /usr/sbin/airmon-ng
     sudo chmod +x /usr/sbin/airmon-ng
     echo -e $GREEN"Done."$ENDCOLOR;
@@ -550,11 +573,17 @@ else
 fi
 
 echo ""
-echo -e $YELLOW"Would you like to install screenfetch? "$ENDCOLOR;
-read INSTALLSCREENFETCH
+screenfetch_default="Y"
+read -p "Would you like to install screenfetch? [$screenfetch_default,n] " screenfetch_default
+screenfetch=${screenfetch:-$screenfetch_default}
 
-if [[ $INSTALLSCREENFETCH = 'y' || $INSTALLSCREENFETCH = 'Y' ]] ; then
+if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
 
+  echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
+  echo ""
+  sudo apt-get install bc scrot lsb-release -y
+  echo -e $GREEN"Done."$ENDCOLOR;
+  echo ""
   echo -e $YELLOW"Installing and setting up screenfetch.."$ENDCOLOR;
   echo ""
   echo ""
@@ -602,12 +631,11 @@ else
   echo ""
 
 fi
+java_default="Y"
+read -p "Woud you like to install Java SE? [$java_default,n] " java_default
+java=${java:-$java_default}
 
-echo -e $YELLOW"Woud you like to install Java SE? "$ENDCOLOR;
-read INSTALLJAVA
-echo ""
-
-if [[ $INSTALLJAVA = 'y' || $INSTALLJAVA = 'Y' ]] ; then
+if [[ $java = "java_default" || $java = "y" ]] ; then
   
   echo -e $BLUE"Downloading the Java SE JDK from SolidOptionOS server.. "$ENDCOLOR;
   echo ""
@@ -677,11 +705,11 @@ else
   echo ""
 
 fi
+wifite_default="Y"
+read -p "Would you like to patch wifite with reaver and pixiewps? [$wifite_default/n] " wifite_default
+wifite=${wifite:-$wifite_default}
 
-echo -e $YELLOW"Would you like to patch wifite with reaver and pixiewps? [y/n]"$ENDCOLOR;
-read PATCHWIFITE
-
-if [[ $PATCHWIFITE = 'y' || $PATCHWIFITE = 'Y' ]] ; then
+if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
   echo -e $YELLOW"Patching Wifite with Reaver and Pixiewps"$ENDCOLOR;
   echo ""
@@ -722,11 +750,12 @@ if [[ $PATCHWIFITE = 'y' || $PATCHWIFITE = 'Y' ]] ; then
   git clone https://github.com/wiire/pixiewps.git
   echo ""
   echo ""
- 		
-  echo -e $YELLOW"Would you like to update and upgrade before installation.. "$ENDCOLOR;
-  read UPANDUP2
+  
+  up2_default="Y"  
+  read -p "Would you like to update and upgrade before installation? [$up2_default,n] " up2_default
+  up2=${up2:-$up2_default}
 	
-  if [[ $UPANDUP2 = 'Y' || $UPANDUP2 = 'y' ]]; then
+  if [[ $up2 = "up2_default" || $up2 = "y" ]]; then
 
     echo -e $BLUE"Updating and Upgrading.."$ENDCOLOR;
     echo ""
@@ -743,11 +772,12 @@ if [[ $PATCHWIFITE = 'y' || $PATCHWIFITE = 'Y' ]] ; then
     echo ""
 
   fi
+  
+  pre_default="Y"
+  read -p "Would you like to install prerequisites? [$pre_default,n] " pre_default
+  pre=${pre:-$pre_default}
 
-  echo -e $YELLOW"Would you like to install prerequisites? "$ENDCOLOR;
-  read PREREQS
-
-  if [[ $PREREQS = 'Y' || $PREREQS = 'y' ]]; then
+  if [[ $pre = "pre_default" || $pre = "y" ]]; then
 
     echo -e $BLUE"Installing prerequisites.."$ENDCOLOR;
     echo ""
@@ -807,7 +837,7 @@ if [[ $PATCHWIFITE = 'y' || $PATCHWIFITE = 'Y' ]] ; then
  
   echo -e $BLUE"Patching wfite-ng.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/optionZ3ro/assets/wifite-ng-patch /usr/bin/wifite-ng
+  sudo cp $HOMEPATH/solid-scripts/assets/wifite-ng-patch /usr/bin/wifite-ng
   sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite
   sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite
   sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite-ng
@@ -947,7 +977,7 @@ if [[ $HTOPUPGRADE = 'y' || $HTOPUPGRADE = 'Y' ]] ; then
 	
   fi
 
-  sudo cp $HOMEPATH/optionZ3ro/assets/htoprc $HOMEPATH/.config/htop/htoprc
+  sudo cp $HOMEPATH/solid-scripts/assets/htoprc $HOMEPATH/.config/htop/htoprc
   echo ""
   echo -e $GREEN"Success! Htop style upgraded."$ENDCOLOR;
   echo ""
