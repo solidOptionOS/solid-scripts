@@ -26,10 +26,10 @@ echo -e $CYAN"Solid-Update"$ENDCOLOR;
 sleep 1
 echo ""
 CLEANPURGE_DEFAULT="Y"
-read -p "Would you like to clean and purge first? [y/n] " CLEANPURGE_DEFAULT
+read -p "Would you like to clean and purge first? [$CLEANPURGE_DEFAULT/n] " CLEANPURGE_DEFAULT
 CLEANPURGE=${CLEANPURGE:-$CLEANPURGE_DEFAULT}
 
-if [[ $CLEANPURGE = 'y' || $CLEANPURGE = "$CLEANPURGE_DEFAULT" ]] ; then
+if [[ $CLEANPURGE = 'y' || $CLEANPURGE = '$CLEANPURGE_DEFAULT' ]] ; then
 
 	echo ""
 	echo -e $YELLOW"Running Clean and Purge.. "$ENDCOLOR;
@@ -63,79 +63,100 @@ else
 	echo ""
 	echo -e $CYAN"Okay. Maybe later"$ENDCOLOR;
 	echo ""
-	clear
 
 fi
-
-echo -e $CYAN"Updating packages.."$ENDCOLOR;
+echo -e $CYAN"Checking for unconfigured packages.."$ENDCOLOR;
 echo ""
-sleep 1
-
-echo -e $BLUE"[apt-get update]"$ENDCOLOR;
-echo ""
-sudo apt-get update
+sudo dpkg --configure -a
 echo ""
 
-echo -e $BLUE"[aptitude update]"$ENDCOLOR;
-echo ""
-sudo aptitude update 
-echo ""
+UPDATEOP_DEFAULT="APT"
+read -p "Would you like to update with apt or aptitude? [$UPDATEOP_DEFAULT/aptitude]" UPDATEOP_DEFAULT
+UPDATEOP=${UPDATEOP:-$UPDATEOP_DEFAULT}
 
-echo -e $CYAN"Cleaning up.."$ENDCOLOR;
-echo ""
-echo -e $BLUE"[apt-get autoremove]"$ENDCOLOR;
-echo ""
-sudo apt-get autoremove
+if [[ $UPDATEOP = '$UPDATE_DEFAULT' || $UPDATEOP = 'apt' ]] ; then
 
-clear
+	echo -e $CYAN"Updating packages.."$ENDCOLOR;
+	echo ""
 
-echo -e $CYAN"Upgrading packages.."$ENDCOLOR;
-echo ""
+	echo -e $BLUE"[apt-get update]"$ENDCOLOR;
+	echo ""
+	sudo apt-get update
+	echo ""
 
-echo -e $BLUE"[apt-get -f install]"$ENDCOLOR;
-echo ""
-sudo apt-get -f install
-echo ""
+	echo -e $CYAN"Removing any older packages before upgrade.."$ENDCOLOR;
+	echo ""
+	echo -e $BLUE"[apt-get autoremove]"$ENDCOLOR;
+	echo ""
+	sudo apt-get autoremove
+	echo ""
 
-echo -e $BLUE"[apt-get upgrade]"$ENDCOLOR;
-echo ""
-sudo apt-get upgrade
-echo ""
+	echo -e $CYAN"Installing any missing dependencies.."$ENDCOLOR;
+	echo ""
 
-echo -e $BLUE"[apt-get dist-upgrade]"$ENDCOLOR;
-echo ""
-sudo apt-get dist-upgrade 
-echo ""
+	echo -e $BLUE"[apt-get -f install]"$ENDCOLOR;
+	echo ""
+	sudo apt-get -f install
+	echo ""
 
-echo -e $BLUE"[aptitude upgrade]"$ENDCOLOR;
-echo ""
-sudo aptitude upgrade
-echo ""
+	echo -e $CYAN"Upgrading packages.."$ENDCOLOR;
+	echo ""
 
-echo -e $BLUE"[aptitude dist-upgrade]"$ENDCOLOR;
-echo ""
-sudo aptitude dist-upgrade
-echo ""
+	echo -e $BLUE"[apt-get upgrade]"$ENDCOLOR;
+	echo ""
+	sudo apt-get upgrade
+	echo ""
 
-echo -e $CYAN"Removing old packages and cleaning up.."$ENDCOLOR;
-echo ""
+	echo -e $BLUE"[apt-get dist-upgrade]"$ENDCOLOR;
+	echo ""
+	sudo apt-get dist-upgrade 
+	echo ""
+fi
 
-echo -e $BLUE"[apt-get autoremove]"$ENDCOLOR;
-echo ""
-sudo apt-get autoremove
-echo ""
+if [[ $UPDATEOP = 'aptitude' || $UPDATEOP = 'APTITUDE' ]] ; then
 
-echo -e $BLUE"[apt-get autoclean]"$ENDCOLOR; 
-echo ""
-sudo apt-get autoclean
-echo ""
-clear
+        echo -e $CYAN"Updating packages.."$ENDCOLOR;
+        echo ""
 
+        echo -e $BLUE"[aptitude update]"$ENDCOLOR;
+        echo ""
+        sudo aptitude update
+        echo ""
+
+        echo -e $CYAN"Removing any older packages before upgrade.."$ENDCOLOR;
+        echo ""
+        echo -e $BLUE"[apt-get autoremove]"$ENDCOLOR;
+        echo ""
+        sudo apt-get autoremove
+        echo ""
+
+        echo -e $CYAN"Installing any missing dependencies.."$ENDCOLOR;
+        echo ""
+
+        echo -e $BLUE"[aptitude -f install]"$ENDCOLOR;
+        echo ""
+        sudo aptitude -f install
+        echo ""
+
+        echo -e $CYAN"Upgrading packages.."$ENDCOLOR;
+        echo ""
+
+        echo -e $BLUE"[aptitude upgrade]"$ENDCOLOR;
+        echo ""
+        sudo aptitude upgrade
+        echo ""
+
+        echo -e $BLUE"[aptitude dist-upgrade]"$ENDCOLOR;
+        echo ""
+        sudo aptitude dist-upgrade 
+        echo ""
+fi  
+echo ""
 fixornot_default="Y"
 read -p "Would you like to try and repair any broken packages? [$fixornot_default/n] " fixornot_defualt
 fixornot=${fixornot:-$fixornot_default}
 
-if [[ $fixornot = 'y' || $fixornot = "$fixornot_default" ]] ; then
+if [[ $fixornot = 'y' || $fixornot = '$fixornot_default' ]] ; then
 
 	echo ""
 	echo -e $CYAN"OK. Attempting to repair broken packages.. "$ENDCOLOR;
@@ -150,21 +171,16 @@ if [[ $fixornot = 'y' || $fixornot = "$fixornot_default" ]] ; then
 	sudo apt-get upgrade --fix-broken
 	echo ""
 
-	echo -e $BLUE"[aptitude -f install]"$ENDCOLOR;
-	echo ""
-	sudo aptitude -f install
-	echo ""
-
 	echo -e $BLUE"[apt-get -f install]"$ENDCOLOR;  
         echo ""
 	sudo apt-get -f install
 	echo ""
 
-	moproblems_default="Y"
+	moproblems_default="N"
         read -p "Run aptitude -f install --full-resolver? [$moproblems_default/n]" moproblems_default
         moproblems=${moproblems:-$moproblems_default}
 
-        if [[ $moproblems = 'y' || $moproblems = "$moproblems_default" ]] ; then	
+        if [[ $moproblems = 'n' || $moproblems = '$moproblems_default' ]] ; then	
 		echo ""
 		echo -e $CYAN"Attempting fix with full-resolver.."$ENDCOLOR;
 		echo ""
@@ -191,13 +207,11 @@ else
 
 fi
 
-clear
-
 APTFILE_DEFAULT="Y"
 read -p "Would you like to install and update apt-file? [$APTFILE_DEFAULT/n] " APTFILE_DEFAULT
 APTFILE=${APTFILE:-$APTFILE_DEFAULT}
 
-if [[ $APTFILE = 'y' || $APTFILE = "$APTFILE_DEFAULT" ]] ; then
+if [[ $APTFILE = 'y' || $APTFILE = '$APTFILE_DEFAULT' ]] ; then
 
         echo ""
         echo -e $CYAN"Installing and/or updating apt-file"$ENDCOLOR;
@@ -249,8 +263,8 @@ echo ""
 echo -e $BLUE"[update-pciids]"$ENDCOLOR;
 echo ""
 sudo update-pciids
+echo ""
 
-clear
 updateOui_default="Y"
 read -p "Would you like to update-oui? [$updateOui_default/n] " updateOui_default
 updateOui=${updateOui:-$updateOui_default}
@@ -268,7 +282,7 @@ if [[ $updateOui = 'y' || $updateOui = "$updateOui_Default" ]] ; then
 	echo ""
 	sudo update-ieee-data
 	echo ""
-
+	sleep 1
 else
 	echo ""
 	echo -e $CYAN"Okay. Maybe later."$ENDCOLOR;
@@ -280,19 +294,16 @@ clear
 
 echo -e $CYAN"Updating initramfs.."$ENDCOLOR;
 echo ""
+sleep 1
 echo -e $BLUE"[update-initramfs -uv]"$ENDCOLOR;
 echo ""
 sudo update-initramfs -uv
 echo ""
 echo -e $CYAN"Updating grub and grub2.."$ENDCOLOR;
 echo ""
-echo -e $BLUE"[update-grub]"$ENDCOLOR;
+echo -e $BLUE"[update-grub && update-grub2]"$ENDCOLOR;
 echo ""
-sudo update-grub
-echo ""
-echo -e $BLUE"[update-grub2]"$ENDCOLOR;
-echo ""
-sudo update-grub2
+sudo update-grub && sudo update-grub2
 echo ""
 sleep 1
 echo -e $YELLOW"    ____         __              __  __        __      __         __"$ENDCOLOR;
