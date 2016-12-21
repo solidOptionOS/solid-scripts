@@ -7,8 +7,8 @@ deb-src http://repo.kali.org/kali kali-rolling main contrib non-free
 #deb-src http://repo.kali.org/kali kali-dev main contrib non-free
 
 # Kali Bleeding-Edge Repos
-#deb http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
-#deb-src http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
+deb http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
+deb-src http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
 
 # X-Swat Repo - graphics drivers
 deb http://ppa.launchpad.net/ubuntu-x-swat/x-updates/ubuntu oneiric main
