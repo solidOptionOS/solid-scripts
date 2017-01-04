@@ -156,7 +156,7 @@ fixornot_default="Y"
 read -p "Would you like to try and repair any broken packages? [$fixornot_default/n] " fixornot_defualt
 fixornot=${fixornot:-$fixornot_default}
 
-if [[ $fixornot = 'y' || $fixornot = '$fixornot_default' ]] ; then
+if [[ $fixornot = 'y' || $fixornot = 'Y' ]] ; then
 
 	echo ""
 	echo -e $CYAN"OK. Attempting to repair broken packages.. "$ENDCOLOR;
@@ -176,9 +176,17 @@ if [[ $fixornot = 'y' || $fixornot = '$fixornot_default' ]] ; then
 	sudo apt-get -f install
 	echo ""
 
-	moproblems_default="N"
-        read -p "Run aptitude -f install --full-resolver? [$moproblems_default/n]" moproblems_default
-        moproblems=${moproblems:-$moproblems_default}
+else
+
+	echo ""
+        echo -e $CYAN"Okay. Maybe later."$ENDCOLOR;
+        echo ""
+
+fi
+	
+moproblems_default="N"
+read -p "Run aptitude -f install --full-resolver? [$moproblems_default/n]" moproblems_default
+moproblems=${moproblems:-$moproblems_default}
 
         if [[ $moproblems = 'n' || $moproblems = '$moproblems_default' ]] ; then	
 		echo ""
@@ -198,14 +206,6 @@ if [[ $fixornot = 'y' || $fixornot = '$fixornot_default' ]] ; then
         	echo ""
 
 	fi
-
-else
-
-	echo ""
-	echo -e $CYAN"Okay. Maybe later."$ENDCOLOR;
-	echo ""
-
-fi
 
 APTFILE_DEFAULT="Y"
 read -p "Would you like to install and update apt-file? [$APTFILE_DEFAULT/n] " APTFILE_DEFAULT
@@ -276,11 +276,11 @@ if [[ $updateOui = 'y' || $updateOui = "$updateOui_Default" ]] ; then
 	echo ""
 	echo -e $BLUE"Upgrading to the latest 'ieee-data'.."$ENDCOLOR;
 	echo ""
-	sudo apt-get install --reintsall ieee-data -y
+	sudo apt-get install --reinstall ieee-data -y
 	echo ""
 	echo -e $BLUE"This may take a while depending on your system."$ENDCOLOR;
 	echo ""
-	sudo update-ieee-data
+	sudo update-oui
 	echo ""
 	sleep 1
 else
