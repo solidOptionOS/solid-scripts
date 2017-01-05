@@ -318,7 +318,7 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
   # sudo apt-get install linux-headers-$(uname -r)
  
   echo ""
-  sudo apt-get install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark aircrack-ng-dbgsym adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gpart gparted scrot lsb-release gcc g++ build-essential kbuild cmake make 
+  sudo apt-get install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gpart gparted scrot lsb-release gcc g++ build-essential kbuild cmake make 
   echo ""
   sudo apt-get install firmware-ralink firmware-atheros firmware-realtek bash-completion monodevelop
   echo ""
@@ -1003,7 +1003,7 @@ if [[ $oui = "oui_default" || $oui = "y" ]] ; then
   echo ""
   sudo apt-get install ieee-data
   echo "" 
-  sudo update-ieee-data
+  sudo update-oui
   echo -e $GREEN"Update of ieee-data complete."$ENDCOLOR;
   echo ""
 
