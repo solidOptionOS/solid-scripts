@@ -1,4 +1,4 @@
-#!bin/bash -c
+#!/bin/bash -c
 echo "Apt-fast is a shell wrapper script that speeds up the updating and upgrading of apt-get.";
 echo ""
 sleep 1
