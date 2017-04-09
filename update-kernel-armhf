@@ -1,10 +1,13 @@
 #!/bin/bash
-sudo apt-get -y install bc curl gcc git libncurses5-dev lzop make u-boot-tools
-git clone https://github.com/offensive-security/kali-arm-build-scripts
-cd kali-arm-build-scripts
- ./build-deps.sh
- ./rock_pro/scripts/getTools.sh
- ./createNandImg.sh
+git://git.launchpad.net/~ubuntu-kernel-test/ubuntu/+source/linux/+git/mainline-crack v4.1
+   
+   
+#sudo apt-get -y install bc curl gcc git libncurses5-dev lzop make u-boot-tools
+#git clone https://github.com/offensive-security/kali-arm-build-scripts
+#cd kali-arm-build-scripts
+ #./build-deps.sh
+ #./rock_pro/scripts/getTools.sh
+ #./createNandImg.sh
  #./rock_pro/scripts/flashNandImg.sh
  
 # curl -sSL https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.7.5.tar.xz | unxz | tar -xvf -
