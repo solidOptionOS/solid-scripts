@@ -496,9 +496,10 @@ CUSTOMTHEMES=${CUSTOMTHEMES:-$CUSTOMTHEMES_DEFAULT}
 
 if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
 
+  sudo apt-file update
   echo -e $BLUE"Adding ppa:noobslab/themes.."$ENDCOLOR;
   echo ""
-  sudo /usr/sbin/add-apt-repository ppa:noobslab/themes
+  sudo add-apt-repository ppa:noobslab/themes
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo ""
@@ -863,14 +864,14 @@ art=${art:-$art_default}
 
 if [[ $art = "art_default" || $art = "y" ]] ; then
 	
-  echo -e $BLUE"Creating Solid-Art folder in $HOMEPATH/Pictures.."$ENDCOLOR;
+  echo -e $BLUE"Downloading into $HOMEPATH/Pictures.."$ENDCOLOR;
   echo ""
   echo ""
 	
-  if [[ ! -e $HOMEPATH/Pictures/Solid-Art ]] ; then
+  if [[ ! -e $HOMEPATH/Pictures ]] ; then
 		
-    mkdir -p $HOMEPATH/Pictures/Solid-Art
-    cd $HOMEPATH/Pictures/Solid-Art
+    mkdir -p $HOMEPATH/Pictures
+    cd $HOMEPATH/Pictures
     echo -e $GREEN"Done."$ENDCOLOR;
     echo ""
     echo ""
@@ -878,9 +879,10 @@ if [[ $art = "art_default" || $art = "y" ]] ; then
     echo -e $BLUE"Downloading artwork for SolidOptionOS server.."$ENDCOLOR;
     echo ""
 
-    if [[ ! -e $HOMEPATH/Pictures/Solid-Art/art-zero.zip ]] ; then		
+    if [[ ! -e $HOMEPATH/Pictures/art-zero.zip ]] ; then		
 			
       wget http://solidoptionos.com/assets/art-zero.zip
+      wget http://solidoptionos.com/assets/sexy.zip
       echo -e $GREEN"Done."$ENDCOLOR;
       echo ""
       echo ""
@@ -899,6 +901,7 @@ if [[ $art = "art_default" || $art = "y" ]] ; then
     echo -e $BLUE"Extracting.."$ENDCOLOR;
     echo ""
     unzip art-zero.zip
+    unzip sexy.zip
     echo -e $GREEN"Done."$ENDCOLOR;
     echo ""
     echo ""
@@ -907,23 +910,25 @@ if [[ $art = "art_default" || $art = "y" ]] ; then
     echo ""
     rm -rf __MACOSX/
     rm art-zero.zip
+    rm sexy.zip
     chmod -R 777 *
-    echo -e $GREEN"Success! Solid-Art is now available in $HOMEPATH/Pictures/Solid-Art. "$ENDCOLOR;
+    echo -e $GREEN"Success! Solid-Art is now available in $HOMEPATH/Pictures. "$ENDCOLOR;
     echo ""
     echo ""
  
   else
 
     overwrite_default="Y"	  
-    read -p "A Solid-Art folder already exists in $HOMEPATH/Pictures. Do you want to overwrite/merge it with a new download? [$overwrite_default,n] " overwrite_default
+    read -p "Artwork already exists in $HOMEPATH/Pictures. Do you want to overwrite/merge it with a new download? [$overwrite_default,n] " overwrite_default
     overwrite=${overwrite:-$overwrite_default}
 
     if [[ $overwrite = "overwrite_default" || $overwrite = "y" ]] ; then
 			
-      sudo rm -rf $HOMEPATH/Pictures/Solid-Art/art-zero.zip
-      mkdir -p $HOMEPATH/Pictures/Solid-Art
-      cd $HOMEPATH/Pictures/Solid-Art
+      sudo rm -rf $HOMEPATH/Pictures/art-zero.zip
+      mkdir -p $HOMEPATH/Pictures/
+      cd $HOMEPATH/Pictures/
       wget http://solidoptionos.com/assets/art-zero.zip
+      wget http://solidoptionos.com/assets/sexy.zip
       echo -e $GREEN"Done."$ENDCOLOR;
       echo ""
       echo ""
@@ -931,6 +936,7 @@ if [[ $art = "art_default" || $art = "y" ]] ; then
       echo -e $BLUE"Extracting.."$ENDCOLOR;
       echo ""
       unzip art-zero.zip
+      unzip sexy.zip
       echo -e $GREEN"Done."$ENDCOLOR;
       echo ""
       echo ""
@@ -939,6 +945,7 @@ if [[ $art = "art_default" || $art = "y" ]] ; then
       echo ""
       rm -rf __MACOSX/
       rm art-zero.zip
+      rm sexy.zip
       chmod -R 777 *
       echo ""
       echo -e $GREEN"Success! Solid-Art has been updated to the latest version. "$ENDCOLOR;
@@ -1022,11 +1029,11 @@ echo ""
 
 echo -e $BLUE"[updatedb]"$ENDCOLOR;
 echo ""
-sudo updatedb
+sudo updatedb -v --prunepaths /mnt
 
 echo -e $BLUE"[updatedb.mlocate]"$ENDCOLOR;
 echo ""
-sudo updatedb.mlocate
+sudo updatedb.mlocate -v --prunepaths /mnt
 
 echo -e $BLUE"[update-menus]"$ENDCOLOR;
 echo ""
