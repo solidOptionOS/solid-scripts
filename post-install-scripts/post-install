@@ -54,23 +54,6 @@ HOMEPATH=${HOMEPATH:-$homepath_default}
 echo ""
 echo -e $BLUE"Your home path is set to $HOMEPATH/."$ENDCOLOR;
 echo ""
-cpscript_default="N"
-read -p "Copy solid-scripts into $HOMEPATH? [$cpscript_default,y] " cpscript_default
-cpscript=${cpscript:-$cpscript_default}
-
-if [[ $cpscript = 'Y' || $cpscript = 'y' ]]; then
-
-  echo -e $BLUE"Copying solid-scripts folder to $HOMEPATH.."$ENDCOLOR;
-  echo ""
-  sudo cp -rf $parent $HOMEPATH
-  echo ""
-
-else
-
-  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
-
-fi
 aliases_default="Y"
 read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
 aliases=${aliases:-$aliases_default}
@@ -499,7 +482,7 @@ if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
   sudo apt-file update
   echo -e $BLUE"Adding ppa:noobslab/themes.."$ENDCOLOR;
   echo ""
-  sudo add-apt-repository ppa:noobslab/themes
+  sudo /usr/sbin/add-apt-repository ppa:noobslab/themes
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo ""
@@ -520,7 +503,53 @@ else
   echo ""
   echo ""
 
+fi  
+
+CHAT_DEFAULT="N"
+read -p "Would you like to install CHAT PPA? [$CHAT_DEFAULT/n] " CHAT_DEFAULT
+CHAT=${CAHT:-$CHAT_DEFAULT}
+
+if [[ $CHAT = "Y" || $CHAT = "y" ]] ; then
+	
+  sudo apt-file update
+  echo -e $BLUE"Adding ppa:noobslab/themes.."$ENDCOLOR;
+  echo ""
+  sudo /usr/sbin/add-apt-repository ppa:upubuntu-com/chat
+  sudo apt-get update
+  echo -e $GREEN"Done."$ENDCOLOR;
+  echo ""
+  echo ""
+  echo -e $GREEN"Success! Now chat programs like Skype are available."$ENDCOLOR;
+  echo ""
+  echo ""
+
+else
+       
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+  echo ""
+  echo ""
+
 fi
+UBUNTU_DEFAULT="N"
+read -p "Would you like to install Ubuntu PPAs? [$UBUNTU_DEFAULT/y] " UBUNTU_DEFAULT
+UBUNTU=${UBUNTU:-$UBUNTU_DEFAULT}
+
+if [[ $UBUNTU = "Y" || $UBUNTU = "y" ]] ; then
+
+  echo -e $BLUE"Adding add-apt-repository-ubuntu.."$ENDCOLOR;
+  echo ""
+  sudo cp $HOMEPATH/assets/add-apt-repository-ubuntu /usr/sbin/add-apt-repository-ubuntu
+  echo -e $GREEN"Done."$ENDCOLOR;
+  echo ""  
+
+else
+
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+  echo ""
+  echo ""
+
+fi
+
 airmon_default="Y"
 read -p "Would you like to modify airmon-ng to create the classic monitor interfaces like mon0 instead of the new style like wlan0mon? [$airmon_default/n] " airmon_default
 airmon=${airmon:-$airmon_default}
