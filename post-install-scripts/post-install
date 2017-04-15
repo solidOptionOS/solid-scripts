@@ -391,10 +391,10 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo ""
   echo ""
 
- #  echo -e $BLUE"Adding $USERNAME to /etc/sudoers.."$ENDCOLOR;
- #  sudo sed -i 's/\#\ Allow\ members\ of\ group\ sudo\ to\ execute\ any\ command/'$USERNAME'\	ALL\=\(ALL\:ALL\)\ ALL\' >> /etc/sudoers
- #  echo ""
- #  sudo cat /etc/sudoers
+  echo -e $BLUE"Adding $USERNAME to /etc/sudoers.."$ENDCOLOR;
+  sudo sed -i 's/\#\ Allow\ members\ of\ group\ sudo\ to\ execute\ any\ command/'$USERNAME'\	ALL\=\(ALL\:ALL\)\ ALL\' >> /etc/sudoers
+  echo ""
+  sudo cat /etc/sudoers
 
   echo -e $YELLOW"Set a password for $USERNAME.."$ENDCOLOR;
   echo ""
@@ -491,7 +491,7 @@ else
 
 fi
 CUSTOMTHEMES_DEFAULT="Y"
-read -p "Would you like to install custom themes and icons? [$CUSTOMTHEMES_DEFAULT/n] " CUSTOMTHEMESE_DEFAULT
+read -p "Would you like to install custom themes and icons? [$CUSTOMTHEMES_DEFAULT/n] " CUSTOMTHEMES_DEFAULT
 CUSTOMTHEMES=${CUSTOMTHEMES:-$CUSTOMTHEMES_DEFAULT}
 
 if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
@@ -782,7 +782,7 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
     echo -e $BLUE"Installing prerequisites.."$ENDCOLOR;
     echo ""
-    sudo apt-get install libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
+    sudo apt-get install wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
     echo ""
     echo ""	
 
@@ -1004,6 +1004,7 @@ if [[ $oui = "oui_default" || $oui = "y" ]] ; then
   sudo apt-get install ieee-data
   echo "" 
   sudo update-oui
+  sudo update-ieee-data
   echo -e $GREEN"Update of ieee-data complete."$ENDCOLOR;
   echo ""
 
