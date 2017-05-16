@@ -185,10 +185,10 @@ else
 fi
 	
 moproblems_default="N"
-read -p "Run aptitude -f install --full-resolver? [$moproblems_default/n]" moproblems_default
+read -p "Run aptitude -f install --full-resolver? [$moproblems_default/y]" moproblems_default
 moproblems=${moproblems:-$moproblems_default}
 
-        if [[ $moproblems = 'n' || $moproblems = '$moproblems_default' ]] ; then	
+        if [[ $moproblems = 'y' || $moproblems = 'Y' ]] ; then	
 		echo ""
 		echo -e $CYAN"Attempting fix with full-resolver.."$ENDCOLOR;
 		echo ""
@@ -281,6 +281,7 @@ if [[ $updateOui = 'y' || $updateOui = "$updateOui_Default" ]] ; then
 	echo -e $BLUE"This may take a while depending on your system."$ENDCOLOR;
 	echo ""
 	sudo update-oui
+	sudo update-ieee-data
 	echo ""
 	sleep 1
 else
