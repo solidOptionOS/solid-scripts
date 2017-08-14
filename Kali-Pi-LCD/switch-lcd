@@ -1,0 +1,2 @@
+#!/bin/bash
+cp ~/99-fbdev.conf /etc/X11/xorg.conf.d/
