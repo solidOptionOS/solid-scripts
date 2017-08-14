@@ -40,9 +40,14 @@ if [[ $CLEANPURGE = 'y' || $CLEANPURGE = '$CLEANPURGE_DEFAULT' ]] ; then
 	sudo apt-get autoremove
 	echo ""
 
-	echo -e $BLUE"[apt-get clean]"$ENDCOLOR;
+	echo -e $BLUE"[apt-fast clean && apt-fast autoclean]"$ENDCOLOR;
 	echo ""
-	sudo apt-get clean
+	sudo apt-fast clean && sudo apt-fast autoclean
+	echo ""
+
+	echo -e $BLUE"[apt-get clean && apt-get autoclean]"$ENDCOLOR;
+	echo ""
+	sudo apt-get clean && sudo apt-get autoclean
 	echo ""
 	
 	echo -e $BLUE"[apt-get purge]"$ENDCOLOR;
@@ -52,7 +57,7 @@ if [[ $CLEANPURGE = 'y' || $CLEANPURGE = '$CLEANPURGE_DEFAULT' ]] ; then
 
 	echo -e $BLUE"[rm -rf /var/cache/apt/archives/]"$ENDCOLOR;
 	echo ""
-	sudo rm -rf /var/cache/apt/archives/
+	sudo rm -rf -i /var/cache/apt/archives/
 	echo ""
 
         echo -e $CYAN"Clean and Purge Complete"$ENDCOLOR;
@@ -161,6 +166,12 @@ if [[ $fixornot = 'y' || $fixornot = 'Y' ]] ; then
 	echo ""
 	echo -e $CYAN"OK. Attempting to repair broken packages.. "$ENDCOLOR;
 	echo ""
+	
+	echo -e $BLUE"[dpkg --configure -a]"$ENDCOLOR;
+	echo ""
+	sudo dpkg --configure -a
+	echo ""
+	
 	echo -e $BLUE"[apt-get update --fix-missing]"$ENDCOLOR;
 	echo ""
 	sudo apt-get update --fix-missing
@@ -234,6 +245,35 @@ else
 
 fi
 
+APTFAST_DEFAULT="Y"
+read -p "Would you like to install and update apt-fast? [$APTFAST_DEFAULT/n] " APTFAST_DEFAULT
+APTFAST=${APTFAST:-$APTFAST_DEFAULT}
+
+if [[ $APTFAST = 'y' || $APTFAST = '$APTFAST_DEFAULT' ]] ; then 
+
+	echo ""
+	echo -e $CYAN"Installing and updating apt-fast.."$ENDCOLOR;
+	echo ""
+	echo -e $BLUE"[apt-get install -y aria2 git]"$ENDCOLOR;
+	echo ""
+	sudo apt-get install -y aria2 git
+	echo ""
+
+	if ! [[ -f /usr/bin/apt-fast ]]; then
+		git clone https://github.com/ilikenwf/apt-fast /tmp/apt-fast
+		sudo cp /tmp/apt-fast/apt-fast /usr/bin
+		sudo chmod +x /usr/bin/apt-fast
+		sudo cp /tmp/apt-fast/apt-fast.conf /etc
+	fi
+
+else 
+
+	echo ""
+	echo -e $CYAN"Okay. Maybe later."$ENDCOLOR;
+	echo ""
+
+fi
+
 echo -e $CYAN"Updating database, menus, USB and PCI IDs."$ENDCOLOR;
 echo ""
 
@@ -244,11 +284,21 @@ echo ""
 sudo update-menus
 echo ""
 
-echo -e $CYAN"Updating database.."$ENDCOLOR;
+echo -e $CYAN"Updating databases.."$ENDCOLOR;
 echo ""
 echo -e $BLUE"[updatedb]"$ENDCOLOR;
 echo ""
 sudo updatedb
+echo ""
+
+echo -e $BLUE"[updatedb.mlocate]"$ENDCOLOR;
+echo ""
+sudo updatedb.mlocate
+echo ""
+
+echo -e $BLUE"[updatedb.findutils]"$ENDCOLOR;
+echo ""
+sudo updatedb.findutils
 echo ""
 
 echo -e $CYAN"Updating USB IDs.."$ENDCOLOR;
@@ -263,6 +313,28 @@ echo ""
 echo -e $BLUE"[update-pciids]"$ENDCOLOR;
 echo ""
 sudo update-pciids
+echo ""
+
+echo -e $CYAN"Updating binftms.."$ENDCOLOR;
+echo ""
+echo -e $BLUE"[update-binftms]"$ENDCOLOR;
+echo ""
+sudo update-binftms
+echo ""
+
+echo -e $CYAN"Updating gsfontmap.."$ENDCOLOR;
+echo ""
+echo -e $BLUE"[update-gsfontmap]"$ENDCOLOR;
+echo ""
+sudo update-gsfontmap
+update-gsfontmap
+echo ""
+
+echo -e $CYAN"Updating updmap.."$ENDCOLOR;
+echo ""
+echo -e $BLUE"[update-updmap]"$ENDCOLOR;
+echo ""
+sudo update-updmap
 echo ""
 
 updateOui_default="Y"
@@ -313,3 +385,4 @@ echo -e $YELLOW"  _\ \/ // (_-</ __/ -_)  ' \  / /_/ / _ \/ _  / _ \`/ __/ -_) _
 echo -e $YELLOW" /___/\_, /___/\__/\__/_/_/_/  \____/ .__/\_,_/\_,_/\__/\__/ \_,_/  "$ENDCOLOR;
 echo -e $YELLOW"     /___/                         /_/                             "$ENDCOLOR;
 exit
+
