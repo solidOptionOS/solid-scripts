@@ -100,7 +100,6 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   sudo mkdir -p /home/$USERNAME/Documents
   sudo mkdir -p /home/$USERNAME/Desktop
   sudo chown -R $USERNAME:$USERNAME /home/$USERNAME
-  sudo chmod -R 777 /home/$USERNAME
   echo ""
 
   echo -e $BLUE"Adding $USERNAME to sudo group."$ENDCOLOR;
@@ -162,7 +161,6 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
     echo ""
     sudo cp /root/.bashrc /home/$USERNAME/.bashrc
     sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bashrc
-    sudo chmod 777 /home/$USERNAME/.bashrc 
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""
     echo -e $GREEN"$USERNAME Setup Complete."$ENDCOLOR;
