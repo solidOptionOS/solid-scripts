@@ -337,6 +337,14 @@ echo ""
 sudo update-updmap
 echo ""
 
+echo -e $CYAN"Updating gems.."$ENDCOLOR;
+echo ""
+echo -e $BLUE"[gem update]"$ENDCOLOR;
+echo ""
+sudo gem update
+echo ""
+
+
 updateOui_default="Y"
 read -p "Would you like to update-oui? [$updateOui_default/n] " updateOui_default
 updateOui=${updateOui:-$updateOui_default}
