@@ -45,3 +45,14 @@ sleep 1
 sudo apt-get upgrade
 
 
+
+echo ""
+echo "Entering /lib/modules/4.9.25+/build.."
+echo ""
+cd /lib/modules/$(uname -r)/build
+echo  ""
+
+echo "Making module.."
+echo ""
+make
+
