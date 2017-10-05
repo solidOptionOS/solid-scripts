@@ -1,7 +1,0 @@
-#!/bin/bash
-cd ~/
-git clone https://github.com/offensive-security/kali-nethunter.git
-cd kali-nethunter/nethunter-installer
-./bootstrap.sh
-python build.py -h
-python build.py -d flounder -n -u -f -fs full
