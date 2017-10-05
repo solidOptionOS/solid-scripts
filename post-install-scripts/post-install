@@ -68,6 +68,8 @@ if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
   echo "alias lz='ls -Zla'" >> $HOMEPATH/.bash_aliases
   echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
   echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
+  echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> $HOMEPATH/.bash_aliases
+ 
   echo ""
 
 else
@@ -342,7 +344,7 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   sudo mkdir -p /home/$USERNAME/Documents
   sudo mkdir -p /home/$USERNAME/Desktop
   sudo chown -R $USERNAME:$USERNAME /home/$USERNAME
-  sudo chmod -R 777 /home/$USERNAME
+  sudo chmod -R 755 /home/$USERNAME
   echo ""
 
   echo -e $BLUE"Adding $USERNAME to sudo group."$ENDCOLOR;
@@ -385,26 +387,26 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo ""
   echo ""
   clonebashrc_default="Y"	
-  read -p "Do you want to clone root .bashrc to $USERNAME .bashrc? [$clonebashrc_default/n] " clonebashrc_default
+  read -p "Do you want to add bash_aliases to $USERNAME? [$clonebashrc_default/n] " clonebashrc_default
   clonebashrc=${clonebashrc:-$clonebashrc_default}
 
   if [[ $clonebashrc = "clonebashrc_default" || $clonebashrc = "y" ]] ; then 
 	
-    echo -e $BLUE"Cloning /root/.bashrc to /home/$USERNAME/.bashrc.."$ENDCOLOR;
+    echo -e $BLUE"Adding bash_aliases to /home/$USERNAME/.bashrc_aliases.."$ENDCOLOR;
     echo ""
     echo -e $BLUE"Backing up first.."$ENDCOLOR; 
     echo ""
-    sudo mkdir -p /home/$USERNAME
+    sudo mkdir -p /home/$USERNAME/backup
     echo ""
-    sudo cp /home/$USERNAME/.bashrc /home/$USERNAME/.bashrc.bak
+    sudo cp /home/$USERNAME/.bashrc /home/$USERNAME/backup/.bashrc.bak
+    sudo cp /home/$USERNAME/.bash_aliases /home/$USERNAME/backup/.bash_aliases.bak
     echo ""
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""
-    echo -e $BLUE"Cloning.."$ENDCOLOR;
+    echo -e $BLUE"Copying bash_aliases from current user.."$ENDCOLOR;
     echo ""
-    sudo cp /root/.bashrc /home/$USERNAME/.bashrc
-    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bashrc
-    sudo chmod 777 /home/$USERNAME/.bashrc 
+    sudo cp /root/.bash_aliases /home/$USERNAME/.bash_aliases
+    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bash_aliases
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""
     echo -e $GREEN"$USERNAME Setup Complete."$ENDCOLOR;
@@ -568,7 +570,9 @@ if [[ $airmon = "airmon_default" || $airmon = "y" ]] ; then
 
   if [[ ! -e /usr/sbin/airmon-ng-bak ]] ; then 
     
-    sudo mv /usr/sbin/airmon-ng /usr/sbin/airmon-ng-bak 
+    mkdir $HOMEPATH/backup
+    sudo cp /usr/sbin/airmon-ng $HOMEPATH/backup/airmon-ng.backup
+
     echo -e $GREEN"Done."$ENDCOLOR;
     echo ""
     echo ""
@@ -790,10 +794,12 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
     echo -e $BLUE"Updating and Upgrading.."$ENDCOLOR;
     echo ""
+    sudo dpkg --configure -a
+    sudo apt-get autoremove
     sudo apt-get update
+    sudo apt-get install -f
     sudo apt-get upgrade
     sudo apt-get dist-upgrade
-    sudo apt-get -f install
     echo ""
     echo ""
 	
