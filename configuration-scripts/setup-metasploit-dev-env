@@ -1,0 +1,11 @@
+#!/bin/bash
+sudo service postgresql start
+sudo apt-get install exiftool
+sudo gem update
+sudo gem install bundler
+cd /opt/metasploit-framework
+login
+bundle install
+service metasploit start
+msf &gt; db_status
+

@@ -1,7 +1,17 @@
-#!/bin/bash -c
-echo "Apt-fast is a shell wrapper script that speeds up the updating and upgrading of apt-get.";
+#!/bin/bash
+echo "Installing aria2 and git..";
 echo ""
-sleep 1
-echo "Installing Apt-Fast..";
+
+sudo apt-get install -y aria2 git
+
+echo "Installing apt-fast..";
 echo ""
-"$(curl -sL https://git.io/vokNn)"
+
+if ! [[ -f /usr/bin/apt-fast ]]; then
+  git clone https://github.com/ilikenwf/apt-fast /tmp/apt-fast
+  sudo cp /tmp/apt-fast/apt-fast /usr/bin
+  sudo chmod +x /usr/bin/apt-fast
+  sudo cp /tmp/apt-fast/apt-fast.conf /etc
+fi
+echo "Done."
+
