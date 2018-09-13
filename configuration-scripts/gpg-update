@@ -1,0 +1,8 @@
+#!/bin/bash
+wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
+
+sleep 10
+wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb
+apt install ./kali-archive-keyring_2018.1_all.deb
+
+
