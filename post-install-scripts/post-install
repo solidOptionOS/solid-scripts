@@ -1,6 +1,8 @@
 #!/bin/bash
+
 clear
-#Colors
+
+# Colors Vars
 dgrey="\033[0;34m"
 port="\033[0;33m"
 RED="\033[1;31m"
@@ -9,10 +11,14 @@ YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
 RED="\033[0;31m"
 ENDCOLOR="\033[0m"
+# End Color Vars
+
 parent=`dirname $PWD`
 grandparent=`dirname $parent`
+
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "$0")
+
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 
@@ -64,8 +70,6 @@ if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
   echo -e $BLUE"Adding aliases to .bashrc.."$ENDCOLOR;
   echo ""
   touch $HOMEPATH/.bash_aliases
-  echo "alias ll='ls -Al'" >> $HOMEPATH/.bash_aliases
-  echo "alias lz='ls -Zla'" >> $HOMEPATH/.bash_aliases
   echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
   echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
   echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> $HOMEPATH/.bash_aliases
@@ -121,12 +125,12 @@ if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
   echo ""
   echo ""
 	
-  echo -e $BLUE"Backing up original sources.list file in $HOMEPATH/backup.."$ENDCOLOR;
+  echo -e $BLUE"Backing up original sources.list file in /root/backup.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo mkdir -p $HOMEPATH/backup/sources
-  sudo cp -rf /etc/apt/ $HOMEPATH/backup/sources/
-  echo -e $GREEN"The entire /etc/apt folder has been backed up to $HOMEPATH/backup/sources/"$ENDCOLOR;
+  sudo mkdir -p /root/backup/sources
+  sudo cp -rf /etc/apt/ /root/backup/sources/
+  echo -e $GREEN"The entire /etc/apt folder has been backed up to /root/backup/sources/"$ENDCOLOR;
   echo ""
 	
   echo -e $BLUE"Updating sources.list.."$ENDCOLOR;
@@ -134,14 +138,14 @@ if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
   echo ""
   sudo cat << EOF > /etc/apt/sources.list
 # Kali-Rolling Repos
-deb http://repo.kali.org/kali kali-rolling main contrib non-free
-deb-src http://repo.kali.org/kali kali-rolling main contrib non-free
+deb http://http.kali.org/kali kali-rolling main contrib non-free
+deb-src http://http.kali.org/kali kali-rolling main contrib non-free
 # Kali-Dev Repos
-#deb http://repo.kali.org/kali kali-dev main contrib non-free
-#deb-src http://repo.kali.org/kali kali-dev main contrib non-free
+#deb http://http.kali.org/kali kali-dev main contrib non-free
+#deb-src http://http.kali.org/kali kali-dev main contrib non-free
 # Kali-Bleeding-Edge
-#deb http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
-#deb-src http://repo.kali.org/kali kali-bleeding-edge main contrib non-free
+#deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free
+#deb-src http://http.kali.org/kali kali-bleeding-edge main contrib non-free
 EOF
   echo ""
   echo ""
@@ -169,8 +173,8 @@ bleeding=${bleeding:-$bleeding_default}
 
 if [[ $bleeding = "bleeding_default" || $bleeding = "y" ]] ; then
 
-  sudo sed -i 's/\#deb\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
-  sudo sed -i 's/\#deb\-src\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/repo.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+  sudo sed -i 's/\#deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+  sudo sed -i 's/\#deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
   echo ""
   sudo cat /etc/apt/sources.list
   echo ""
@@ -228,25 +232,54 @@ else
 
 fi
 multiarch_default="Y"
-read -p "Would you like to install and configure multiarch-support for i386? [$multiarch_default,n] " multiarch_default
+read -p "Would you like to install and configure multiarch-support? [$multiarch_default,n] " multiarch_default
 multiarch=${multiarch:-$multiarch_default}
 
 
 if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 
-  echo -e $BLUE"Adding multiarch-support.."$ENDCOLOR;
-  echo ""
-  sudo apt-get install multiarch-support -y
-  echo ""
+	echo -e $BLUE"Adding multiarch-support.."$ENDCOLOR;
+	echo ""
+	sudo apt-get install multiarch-support -y
+	echo ""
+  
+  	addedArch_default="i386"
+  	read -p "If you want to add any additional architectures, enter them here [$addedArch_default, armhf, amd64, etc.]"
+ 	addedArch=${addedArch:-$addedArch_default}
 
-  echo -e $BLUE"Adding i386 and amd64 architectures.."$ENDCOLOR;
-  echo ""
-  echo ""
-  sudo dpkg --add-architecture i386
-  sudo dpkg --add-architecture amd64
-  echo -e $GREEN"Complete."$ENDCOLOR;
-  echo ""
-  echo ""
+	if [[ $addedArch = "addedArch_default" || $multiarch = "i386" ]]; then
+
+  		echo -e $BLUE"Adding i386 architecture.."$ENDCOLOR;
+  		echo ""
+  		sudo dpkg --add-architecture i386
+  		echo -e $GREEN"Complete."$ENDCOLOR;
+  		echo ""
+	
+	if [[ $addedArch = "amd64" ]] ; then
+
+		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
+		echo ""
+		sudo dpkg --add-architecture amd64
+		echo -e $GREEN"Complete."$ENDCOLOR;
+		echo ""
+
+	if [[ $addedArch = "armhf" ]] ; then 
+
+		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
+		echo ""
+		sudo dpkg --add-architecture armhf
+		echo -e $GREEN"Complete."$ENDCOLOR;
+		echo ""
+
+	if [[ $addedArch = "arm" ]] ; then
+
+		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;
+		echo ""
+		sudo dpkg --add-architecture arm
+		echo -e $GREEN"Complete."$ENDCOLOR;
+		echo ""
+
+	fi	
 
 else
 
@@ -254,6 +287,7 @@ else
   echo ""
 
 fi
+
 upandup_default="Y"
 read -p "Would you like to update and upgrade? [$upandup_default,n] " upandup_default
 upandup=${upandup:-$upandup_default}
@@ -396,10 +430,10 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
     echo ""
     echo -e $BLUE"Backing up first.."$ENDCOLOR; 
     echo ""
-    sudo mkdir -p /home/$USERNAME/backup
+    sudo mkdir -p /root/backup
     echo ""
-    sudo cp /home/$USERNAME/.bashrc /home/$USERNAME/backup/.bashrc.bak
-    sudo cp /home/$USERNAME/.bash_aliases /home/$USERNAME/backup/.bash_aliases.bak
+    sudo cp /home/$USERNAME/.bashrc /root/backup/.bashrc.bak
+    sudo cp /home/$USERNAME/.bash_aliases /root/backup/.bash_aliases.bak
     echo ""
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""

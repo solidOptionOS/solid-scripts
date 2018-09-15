@@ -38,19 +38,50 @@ echo ""
 echo -e $YELLOW"Setup Screenfetch"$ENDCOLOR
 sleep 1
 echo ""
-mkdir -p $HOME/backup
-cd $HOME/backup
+sudo mkdir -p root/backup
+cd root/backup
+
+echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
+echo ""
+sudo apt install bc scrot lsb-release -y
+echo -e $BLUE"Complete."$ENDCOLOR;
+echo ""
+
 echo -e $BLUE"Cloning screenfetch repository .. "$ENDCOLOR;
 sleep 0.5
-git clone https://github.com/KittyKatt/screenFetch.git
-echo ""
-sudo mkdir -p /usr/local/bin
-sudo cp screenFetch/screenfetch-dev /usr/local/bin/screenfetch
-echo ""
-sleep 0.5
-echo -e $YELLOW"Setting screenfetch as executable. Installing in /usr/bin.."$ENDCOLOR;
-sudo chmod +x /usr/local/bin/screenfetch
-echo ""
+
+if [[ -d "/root/backup/screenFetch" ]] ; then
+
+	echo ""
+	echo -e $BLUE"Directory already exists, so updating repository.."$ENDCOLOR;
+	echo ""
+	echo -e $BLUE"[cd /root/backup/screenFetch && sudo git pull]"$ENDCOLOR;
+	echo ""
+	cd /root/backup/screenFetch && sudo git pull
+	echo -e $BLUE"Complete."$ENDCOLOR;
+	echo ""
+	
+	sudo mkdir -p /usr/local/bin
+	sudo cp /root/backup/screenFetch/screenfetch-dev /usr/local/bin/screenfetch
+	echo ""
+	sleep 0.5
+	echo -e $YELLOW"Setting screenfetch as executable. Installing in /usr/bin.."$ENDCOLOR;
+	sudo chmod +x /usr/local/bin/screenfetch
+	echo ""
+
+else 
+
+	git clone https://github.com/KittyKatt/screenFetch.git
+	echo ""
+	sudo mkdir -p /usr/local/bin
+	sudo cp screenFetch/screenfetch-dev /usr/local/bin/screenfetch
+	echo ""
+	sleep 0.5
+	echo -e $YELLOW"Setting screenfetch as executable. Installing in /usr/bin.."$ENDCOLOR;
+	sudo chmod +x /usr/local/bin/screenfetch
+	echo ""
+
+fi 
 
 echo -e $GREEN"Screenfetch Setup Successfully!"$ENDCOLOR;
 sleep 1
