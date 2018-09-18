@@ -1,9 +1,5 @@
-#!/bin/bas
+#!/bin/bash
+wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
 
-gpg --keyserver pgpkeys.mit.edu -cryptsetup-initramfssleep1echo 
-echo "Updating gpg keys.."
-sleep 1
-echo "Done"
-
-rm -rf /var/lib/apt/lists
-sleep 1
+gpg --keyserver pgpkeys.mit.edu --recv-key  ED444FF07D8D0BF6
+gpg -a --export ED444FF07D8D0BF6 | sudo apt-key add -
