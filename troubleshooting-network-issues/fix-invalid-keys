@@ -1,0 +1,9 @@
+#!/bin/bas
+
+gpg --keyserver pgpkeys.mit.edu -cryptsetup-initramfssleep1echo 
+echo "Updating gpg keys.."
+sleep 1
+echo "Done"
+
+rm -rf /var/lib/apt/lists
+sleep 1
