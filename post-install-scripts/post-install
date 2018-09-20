@@ -254,7 +254,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
   		sudo dpkg --add-architecture i386
   		echo -e $GREEN"Complete."$ENDCOLOR;
   		echo ""
-	
+	fi
 	if [[ $addedArch = "amd64" ]] ; then
 
 		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
@@ -262,7 +262,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		sudo dpkg --add-architecture amd64
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
-
+	fi
 	if [[ $addedArch = "armhf" ]] ; then 
 
 		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
@@ -270,7 +270,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		sudo dpkg --add-architecture armhf
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
-
+	fi
 	if [[ $addedArch = "arm" ]] ; then
 
 		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;
@@ -337,9 +337,9 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
   # sudo apt-get install linux-headers-$(uname -r)
  
   echo ""
-  sudo apt-get install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gpart gparted scrot lsb-release gcc g++ build-essential kbuild cmake make 
+  sudo apt-get install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make 
   echo ""
-  sudo apt-get install firmware-ralink firmware-atheros firmware-realtek bash-completion monodevelop
+  sudo apt-get install firmware-ralink firmware-atheros firmware-realtek bash-completion 
   echo ""
   sudo apt-get install flashplugin-nonfree
   sudo update-flashplugin-nonfree --install
