@@ -242,51 +242,53 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 	echo ""
 	sudo apt-get install multiarch-support -y
 	echo ""
-  
-  	addedArch_default="i386"
-  	read -p "If you want to add any additional architectures, enter them here [$addedArch_default, armhf, amd64, etc.]"
- 	addedArch=${addedArch:-$addedArch_default}
 
-	if [[ $addedArch = "addedArch_default" || $multiarch = "i386" ]]; then
+#  	addedArch_default="i386"
+#  	read -p "If you want to add any additional architectures, enter them here [$addedArch_default, armhf, amd64, etc.] " addedArch_default
+# 	addedArch=${addedArch:-$addedArch_default}
 
-  		echo -e $BLUE"Adding i386 architecture.."$ENDCOLOR;
-  		echo ""
-  		sudo dpkg --add-architecture i386
-  		echo -e $GREEN"Complete."$ENDCOLOR;
-  		echo ""
-	
-	if [[ $addedArch = "amd64" ]] ; then
-
-		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
-		echo ""
-		sudo dpkg --add-architecture amd64
-		echo -e $GREEN"Complete."$ENDCOLOR;
-		echo ""
-
-	if [[ $addedArch = "armhf" ]] ; then 
-
-		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
-		echo ""
-		sudo dpkg --add-architecture armhf
-		echo -e $GREEN"Complete."$ENDCOLOR;
-		echo ""
-
-	if [[ $addedArch = "arm" ]] ; then
-
-		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;
-		echo ""
-		sudo dpkg --add-architecture arm
-		echo -e $GREEN"Complete."$ENDCOLOR;
-		echo ""
-
-	fi	
+#	if [[ $addedArch = "addedArch_default" || $multiarch = "i386" ]]; then
+#
+#  		echo -e $BLUE"Adding i386 architecture.."$ENDCOLOR;
+#  		echo ""
+#  		sudo dpkg --add-architecture i386
+#  		echo -e $GREEN"Complete."$ENDCOLOR;
+# 		echo ""
+#	
+#	else [[ $addedArch = "amd64" ]] ; then
+#
+#		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
+#		echo ""
+#		sudo dpkg --add-architecture amd64
+#		echo -e $GREEN"Complete."$ENDCOLOR;
+#		echo ""
+#
+#	else [[ $addedArch = "armhf" ]] ; then 
+#
+#		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
+#		echo ""
+#		sudo dpkg --add-architecture armhf
+#		echo -e $GREEN"Complete."$ENDCOLOR;
+#		echo ""
+#	
+#	else [[ $addedArch = "arm" ]] ; then
+#
+#		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;
+#		echo ""
+#		sudo dpkg --add-architecture arm
+#		echo -e $GREEN"Complete."$ENDCOLOR;
+#		echo ""
+#
+#	fi
 
 else
 
-  echo -e $YELLOW"Okay. maybe later."$ENDCOLOR;
-  echo ""
+	echo ""
+	echo -e $BLUE"Okay. Maybe Later."$ENDCOLOR;
+	echo ""
 
 fi
+
 
 upandup_default="Y"
 read -p "Would you like to update and upgrade? [$upandup_default,n] " upandup_default
@@ -574,7 +576,7 @@ if [[ $UBUNTU = "Y" || $UBUNTU = "y" ]] ; then
 
   echo -e $BLUE"Adding add-apt-repository-ubuntu.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/assets/add-apt-repository-ubuntu /usr/sbin/add-apt-repository-ubuntu
+  sudo cp $HOMEPATH/solid-scripts/assets/add-apt-repository-ubuntu /usr/sbin/add-apt-repository-ubuntu
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""  
 

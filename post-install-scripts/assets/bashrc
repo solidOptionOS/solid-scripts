@@ -117,5 +117,5 @@ screenfetch
 
 # some more ls aliases
 alias xclip='xclip -selection clipboard -c'
-alias goto-solid-scripts='~/solid-scripts'
+alias goto-solid-scripts='/root/solid-scripts'
 alias git-quick-commit='git add * && git commit -m \"quick-update\" && git push'
