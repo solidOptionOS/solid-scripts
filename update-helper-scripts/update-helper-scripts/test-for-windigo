@@ -1,0 +1,1 @@
+ssh -G 2>&1 | grep -e illegal -e unknown > /dev/null && 'System clean' || echo 'System infected'

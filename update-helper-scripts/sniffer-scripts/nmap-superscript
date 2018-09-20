@@ -1,0 +1,100 @@
+#!/bin/bash
+
+osDetection_option="-A"
+topPorts_option="--top-ports"
+TCPSYN_option="-sS"
+openPorts_option="--open"
+debug_option="-d2"
+verbosity_option="-v"
+iflist_option="--iflist"
+IPProtocalScan_option="-sO"
+fast_option="-F"
+aggressiveOS_option="--osscan-guess"
+limitOS_option="--osscan-limit"
+portNumber_default="100"
+topPorts_run="$topPorts_option $portNumber"
+open_default="Y"
+debug_default="Y"
+verbosity_default="Y"
+open_default="Y"
+
+echo -e "NMAP SuperScript"
+echo ""
+
+echo -e "Running nmap --iflist"
+echo ""
+nmap $iflist_option
+echo ""
+
+echo -e "Enter desired IP/MASK: "
+read ipmask
+echo ""
+
+read -p "Would you like to add debug to basic discovery? [$debug_default,n] " debug_default 
+debug=${debug:-$debug_default}
+echo ""
+read -p "Would you like to add verbosity to basic discovery? [$verbosity_default,n] " verbosity_default
+verbosity=${verbosity:-$verbosity_default}
+echo ""
+
+if [[ $debug = "y" || $debug = "$debug_default" ]] && [[ $verbosity = "y" || $verbosity = "$verbosity_default" ]] ; then
+
+  debugv="$debug_option $verbosity_option"
+
+fi
+
+if [[ $debug = "y" || $debug = "$debug_default" ]] && [[ $verbosity = "N" || $verbosity = "n" ]] ; then
+
+  debugv="$debug_option"
+
+fi 
+
+if [[ $debug = "N" || $debug = "n" ]] && [[ $verbosity = "y" || $verbosity = "$verbosity_default" ]] ; then
+
+  debugv="$verbosity_option"
+fi
+
+if [[ $debug = "N" || $debug = "n" ]] && [[ $verbosity = "N" || $verbosity = "n" ]] ; then
+
+  debugv=""
+
+fi
+
+read -p "Would you like to only show active hosts? [$open_default,n] " open_default
+open=${open:-$open_default}
+echo ""
+
+if [[ $open = "$open_default" || $open = "y" ]] ; then
+
+  open="$open_option"
+
+else
+
+  open=""
+
+fi
+
+echo ""
+echo -e "Running [nmap $fast_option $ipmask $debugv $IPProtocalScan_option $open].."
+echo ""
+sleep 1
+
+nmap $fast_option $ipmask $debugv $IPProtocalScan_option $open
+echo ""
+sleep 1
+
+echo -e "Number of ports to scan: [e.g. 100] "
+read portNumber
+#read -p "Number of ports to scan: [default: $portNumber_default] " portNumber_default
+#portNumber=${portNumber:-$portNumber_default}
+echo ""
+
+echo -e "Enumerating active hosts OS [$osDetection_option] TCP SYN [$TCPSYN_option] and ports [$topPorts_option] .. "
+echo ""
+sleep 1
+
+nmap $osDetection_option $TCPSYN_option $aggressiveOS_option $topPorts_option $portNumber $ipmask
+echo ""
+sleep 1
+
+

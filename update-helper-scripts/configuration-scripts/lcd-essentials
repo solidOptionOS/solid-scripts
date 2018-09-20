@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo apt-get install aptitude curl cmake build-essential mailutils python-dev python-pip libusb-1.0-0-dev python-numpy htop ftp locate screen kismet pure-ftpd tightvncserver mysql-server darkstat ntopng mana-toolkit beef-xss resolvconf mitmf dns2proxy dnsmasq hostapd

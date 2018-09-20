@@ -1,0 +1,284 @@
+#!/bin/bash
+clear
+#Colors
+dgrey="\033[0;34m"
+port="\033[0;33m"
+RED="\033[1;31m"
+GREEN="\033[2;32m"
+YELLOW="\033[1;33m"
+BLUE="\033[1;34m"
+RED="\033[0;31m"
+ENDCOLOR="\033[0m"
+echo -e $RED"#################################################################"$ENDCOLOR;
+echo -e $YELLOW"   ____     ___    __  ____       __  _             ____  ____"$ENDCOLOR;
+echo -e $YELLOW"  / __/__  / (_)__/ / / __ \___  / /_(_)__  ___    / __ \/ __/"$ENDCOLOR;
+echo -e $YELLOW" _\ \/ _ \/ / / _  / / /_/ / _ \/ __/ / _ \/ _ \  / /_/ /\ \  "$ENDCOLOR;
+echo -e $YELLOW"/___/\___/_/_/\_,_/  \____/ .__/\__/_/\___/_//_/  \____/___/  "$ENDCOLOR;
+echo -e $YELLOW"                         /_/                                  "$ENDCOLOR;
+echo -e $RED"#################################################################"$ENDCOLOR;
+echo -e $BLUE"#                                 ||"$ENDCOLOR;
+echo -e $BLUE"#                                 ||_________________________/'|"$ENDCOLOR;
+echo -e $BLUE"#                               _| O======/                    |"$ENDCOLOR;
+echo -e $BLUE"#                              |_|               ============  |"$ENDCOLOR;
+echo -e $BLUE"#                                |  __   ______________________|"$ENDCOLOR;
+echo -e $BLUE"#                                |_/  )  (    |___||     O-   /"$ENDCOLOR;
+echo -e $BLUE"#  C a r p e   O m n i o u s          (  )    /  / |_________/"$ENDCOLOR;
+echo -e $BLUE"#                                     (  )   /  /    | ) |   |"$ENDCOLOR;
+echo -e $BLUE"#                                     (__)  /  /     \___|__("$ENDCOLOR;
+echo -e $BLUE"#                                          /  /          )   \ "$ENDCOLOR;
+echo -e $BLUE"#                                         /  /            )   \ "$ENDCOLOR;
+echo -e $BLUE"#                                        /  /              )___\ "$ENDCOLOR;
+echo -e $BLUE"#                                       /  / "$ENDCOLOR;
+echo -e $BLUE"#                                      /__/"$ENDCOLOR;
+echo -e $BLUE"#                                "$ENDCOLOR;
+echo ""
+echo -e $YELLOW"The following will configure Tor browser and configure network settings for use with Whonix Gateway."$ENDCOLOR;
+sleep 2
+echo ""
+echo -e $YELLOW"Important: Please download, install and run the Whonix gateway Virtual Image first."
+echo ""
+echo -e $YELLOW"Would you like to open the setup URL with images and links? [y/n]"$ENDCOLOR;
+read WHONIXURL
+
+if [[ $WHONIXURL = 'y' || $WHONIXURL = 'Y' ]]; then
+
+cd ~/optionZ3ro/scrips/installation-helpers/
+./whonix-url
+
+else
+
+echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+
+fi
+
+echo ""
+echo -e $YELLOW"Installing tor.."$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $BLUE"[apt-get install tor]"$ENDCOLOR;
+sudo apt-get install tor -y
+echo ""
+sleep 1
+echo -e $GREEN"Success! Tor installed."$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $YELLOW"Would you like to install Tor Browser 32bit or 64bt? [32 / 64] "$ENDCOLOR;
+read TORBIT
+
+if [[ $TORBIT = '32' ]]; then
+
+cd ~/
+sudo wget http://solidoptionos.com/assets/tor-browser-linux32-5.5.2_en-US.tar.xz
+tar -xJf ~/tor-browser-linux32-5.5.2_en-US.tar.xz
+cd ~/tor-browser/
+echo -e $GREEN"Success!"$ENDCOLOR;
+echo ""
+sleep 1
+
+else
+
+cd ~/
+sudo wget http://solidoptionos.com/assets/tor-browser-linux64-5.5.2_en-US.tar.xz
+tar -xJf ~/tor-browser-linux64-5.5.2_en-US.tar.xz
+cd ~/tor-browser/
+echo -e $GREEN"Success!"$ENDCOLOR;
+echo ""
+sleep 1
+
+fi
+
+echo -e $BLUE"Next we will configure your network to work with the Whonix gateway.  Make sure Whonix is running on a seperate Virtual Machine."$ENDCOLOR;
+echo ""
+sleep 1
+
+echo -e $YELLOW"Configure Network Manager to manage network configurations? [y/n] "$ENDCOLOR;
+
+read CONFNETWORKMANAGER
+
+if [[ $CONFNETWORKMANAGER = 'y' || $CONFNETWORKMANAGER = 'Y' ]]; then
+
+echo -e $BLUE"Backing up NetworkManager.conf.."$ENDCOLOR;
+echo ""
+
+sleep 1
+
+sudo cp /etc/NetworkManager/NetworkManager.conf /etc/NetworkManager/NetworkManager.conf.bak
+echo ""
+echo -e $GREEN"Success! NetworkManager.conf backed up to /etc/NetworkManager/NetworkManager.conf.bak."$ENDCOLOR;
+echo ""
+sleep 1
+
+else
+
+echo -e $YELLOW"Okay. Maybe later"$ENDCOLOR;
+echo ""
+sleep 1
+
+fi
+
+echo -e $YELLOW"Configure network interfaces to Whonix? [y/n]"$ENDCOLOR;
+
+read CONFINTERFACES
+
+if [[ $CONFINTERFACES = 'y' || $CONFINTERFACES = 'Y' ]]; then
+
+echo -e $BLUE"Configuring NetworkManager to manage interfaces.."$ENDCOLOR;
+echo ""
+sleep 1
+sudo cp ~/optionZ3ro/assets/NetworkManager-managed.conf /etc/NetworkManager/NetworkManager.conf
+echo -e $BLUE"Backing up /etc/network/interfaces.."$ENDCOLOR;
+sleep 1
+echo ""
+sudo cp /etc/network/interfaces /etc/network/interfaces.bak
+echo -e $GREEN"Success! Backup is located at /etc/network/interfaces.bak."$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $BLUE"Adding Whonix network configuration to /etc/network/interfaces.."$ENDCOLOR;
+echo ""
+sleep 1
+sudo cp ~/optionZ3ro/assets/whonix-interfaces /etc/network/interfaces
+echo -e $GREEN"Success!"$ENDCOLOR;
+echo ""
+sleep 1
+
+else
+
+echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+echo ""
+
+fi
+
+echo -e $YELLOW"Would you like to set nameservers to Whonix gateway? [y/n]"$ENDCOLOR;
+
+read NAMESERVERCONF
+
+if [[ $NAMESERVERCONF = 'y' || $NAMESERVERCONF = 'Y' ]]; then
+
+echo -e $BLUE"Backing up /etc/resolv.conf.."$ENDCOLOR;
+echo ""
+sleep 1
+sudo cp /etc/resolv.conf /etc/resolv.conf.bak
+echo -e $GREEN"Success! Backup is located at /etc/resolv.conf.bak."$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $BLUE"Configuring resolv.conf to work with Whonix gateway.."$ENDCOLOR;
+echo ""
+sleep 1
+sudo cp ~/optionZ3ro/assets/whonix-resolv.conf /etc/resolv.conf
+echo -e $GREEN"Success! Whonix resolv.conf configuration complete."$ENDCOLOR;
+
+else
+
+echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+echo ""
+
+fi 
+
+echo -e $YELLOW"Bounce interface inside of Kali? Only do this when Whonix gateway is running. [y/n]"$ENDCOLOR;
+
+read BOUNCENET
+
+if [[ $BOUNCENET = 'y' || $BOUNCENET = 'Y' ]] ; then
+
+echo -e $YELLOW"Bouncing the interface inside of Kali..(you may run this command anytime with the script '~/optionZero/scripts/bounce-interface'"$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $BLUE"[ifdown eth0]"$ENDCOLOR;
+sudo ifdown eth0
+echo ""
+sleep 1
+echo -e $BLUE"[ifup eth0]"$ENDCOLOR;
+sudo ifup eth0
+echo -e $GREEN"Success!"$ENDCOLOR;
+echo ""
+
+else
+
+echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+
+fi
+
+echo -e $GREEN"Success!  Whonix interface configuration complete."$ENDCOLOR;
+
+echo -e $YELLOW"Recommended:  Please close Kali, and run a virtual machine with Whonix gateway running, then restart the Kali Virtual Machine and return to this script."$ENDCOLOR;
+echo ""
+
+
+echo -e $YELLOW"Restore network interfaces backup? [y/n]" $ENDCOLOR;
+read RESTORENETWORK
+
+if [[ $RESTORENETWORK = 'y' || $RESTORENETWORK = 'Y' ]] ; then
+
+sudo cp /etc/network/interfaces.bak /etc/network/interfaces
+echo -e $GREEN"Default network interfaces restored."$ENDCOLOR;
+echo ""
+sleep 1
+
+echo -e $BLUE"Restarting Network.."$ENDCOLOR;
+echo ""
+sleep 1
+sudo /etc/init.d/networking restart
+sleep 1
+sudo /etc/init.d/network-manager restart
+echo ""
+
+else 
+
+echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+echo ""
+echo -e $YELLOW"You can always restart the network after making a chage with the script, '~/optionZ3ro/scripts/restart-network'"$ENDCOLOR;
+
+fi
+
+echo ""
+sleep 1
+echo -e $BLUE"It is highly recommended to start Tor Browser bundle as a non-root user."$ENDCOLOR;
+sleep 0.5
+echo ""
+echo -e $YELLOW"Would you like to setup a non-root user now? [y/n] "$ENDCOLOR;
+
+read SETUPNONROOT
+
+if [[ $SETUPNONROOT = 'y' || $SETUPNONROOT = 'Y' ]] ; then
+
+echo -e $YELLOW"What would you like the name of the new user to be? "$ENDCOLOR;
+read NEWUSER
+
+sudo useradd -m $NEWUSER
+echo -e $GREEN"New user, $NEWUSER, created."$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $BLUE"Create a password for $NEWUSER"$ENDCOLOR;
+passwd $NEWUSER
+
+echo -e $BLUE"Adding $NEWUSER to sudoers group.."$ENDCOLOR;
+echo ""
+sleep 1
+usermod -aG sudo $NEWUSER
+echo -e $GREEN"Success!"$ENDCOLOR;
+
+echo ""
+sleep 1
+echo -e $BLUE"Specifying shell of $NEWUSER to /bin/bash.."$ENDCOLOR;
+echo ""
+sleep 1
+chsh -s /bin/bash $NEWUSER
+echo -e $GREEN"Success!"$ENDCOLOR;
+echo ""
+sleep 1
+echo -e $YELLOW"New user, $NEWUSER, created, added to sudoers group with shell set to /bin/bash."$ENDCOLOR;
+
+else
+
+echo -e $YELLOW"Okay.  Maybe later."$ENDCOLOR;
+
+fi
+
+echo ""
+sleep 1
+echo -e $YELLOW"All set.  To run the Tor Browser bundle, use the command './start-tor-browser.desktop' as a non-root user in the ~/tor-browser/ folder."$ENDCOLOR;
+echo ""
+echo -e $BLUE"#################################"$ENDCOLOR;
+echo -e $YELLOW"#      Operation Complete.       #"$ENDCOLOR;
+echo -e $BLUE"#################################"$ENDCOLOR;
+echo ""

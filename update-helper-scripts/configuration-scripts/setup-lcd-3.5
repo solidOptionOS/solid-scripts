@@ -1,0 +1,7 @@
+#!/bin/bash
+mount /dev/mmcblk0p1 /boot
+cd /usr/local/src
+wget  -O re4son-kernel_current.tar.xz https://whitedome.com.au/re4son/downloads/11299/
+tar -xJf re4son-kernel_current.tar.xz
+cd re4son-kernel_4*
+./install.sh

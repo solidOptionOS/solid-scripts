@@ -1,0 +1,18 @@
+# Kali-Rolling Repos
+deb http://http.kali.org/kali kali-rolling main contrib non-free
+deb-src http://http.kali.org/kali kali-rolling main contrib non-free
+
+# Kali Dev Repos
+deb http://http.kali.org/kali kali-dev main contrib non-free
+deb-src http://repo.kali.org/kali kali-dev main contrib non-free
+
+# Kali Bleeding-Edge Repos
+deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free
+deb-src http://http.kali.org/kali kali-bleeding-edge main contrib non-free
+
+# X-Swat Repo - graphics drivers
+deb http://ppa.launchpad.net/ubuntu-x-swat/x-updates/ubuntu oneiric main
+
+# Themes Repo
+deb http://ppa.launchpad.net/noobslab/themes/ubuntu oneiric main 
+
