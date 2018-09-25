@@ -74,6 +74,7 @@ read UPDATEOUI
 if [[ $UPDATEOUI = 'Y' || $UPDATEOUI = 'y' ]] ; then
 
   sudo update-ieee-data
+  sudo airodump-ng-oui-update
 
 else 
 

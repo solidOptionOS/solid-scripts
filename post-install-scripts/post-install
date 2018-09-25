@@ -254,7 +254,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
   		sudo dpkg --add-architecture i386
   		echo -e $GREEN"Complete."$ENDCOLOR;
   		echo ""
-	
+ 	fi	
 	if [[ $addedArch = "amd64" ]] ; then
 
 		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
@@ -262,7 +262,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		sudo dpkg --add-architecture amd64
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
-
+	fi
 	if [[ $addedArch = "armhf" ]] ; then 
 
 		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
@@ -270,7 +270,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		sudo dpkg --add-architecture armhf
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
-
+	fi
 	if [[ $addedArch = "arm" ]] ; then
 
 		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;

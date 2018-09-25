@@ -14,12 +14,12 @@ sleep 1
 echo "[sudo /etc/init.d/network-manager start]";
 sudo /etc/init.d/network-manager start
 sleep 1
-echo "[sudo /etc/init.d/networking restart]";
-sudo /etc/init.d/networking restart
-sleep 1
-echo "[sudo /etc/init.d/network-manager restart]";
-sudo /etc/init.d/network-manager restart
-sleep 1
+#echo "[sudo /etc/init.d/networking restart]";
+#sudo /etc/init.d/networking restart
+#sleep 1
+#echo "[sudo /etc/init.d/network-manager restart]";
+#sudo /etc/init.d/network-manager restart
+#sleep 1
 echo "[sudo ifconfig eth0 down]";
 sudo ifconfig eth0 down
 sleep 1
