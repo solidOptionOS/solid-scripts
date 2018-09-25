@@ -1,0 +1,9 @@
+#!/bin/bash
+sudo apt-get install parrot-tools-full
+sudo apt-get install parrot-tools-arm
+sudo apt-get install parrot-tools-cloud
+sudo apt-get install parrot-meta-forensic
+sudo apt-get install parrot-meta-gpu
+sudo apt-get install parrot-meta-pwtwools
+sudo apt-get install parrot-meta-rfid
+sudo apt-get install parrot-meta-sdr parrot-meta-voip parrot-meta-web parrot-meta-wireless 

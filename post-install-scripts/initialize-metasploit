@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Starting postgresql.."
+sudo /etc/init.d/postgresql start"
+echo ""
+echo "Complete"
+echo ""
+echo "Setting up the database.."
+echo ""
+sudo msfdb init
+

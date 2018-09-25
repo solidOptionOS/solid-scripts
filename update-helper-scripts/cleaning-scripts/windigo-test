@@ -1,0 +1,30 @@
+#!/bin/bash
+if $ssh -G 2>&1 | grep -e illegal -e unknow > /dev/null; then
+if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
+else
+echo "Possible Linux/Ebury - Operation Windigo installetd"
+fi
+sleep 1
+
+echo "Chedcking openssh version...";
+echo ""
+OPENSSH_VER=$(grep -o 'OpenSSH_[0-9].[0-9]p[1-9]' <(ssh -V 2>&1) | sed 's/OpenSSH_//')
+sleep 1
+echo "Complete.";
+echo "";
+sleep 1
+echo "Checking for false positive.";
+echo "";
+sleep 1
+echo "Gathering information from  openssh version..";
+OPENSSH_TEST=$(echo "$OPENSSH_VER" | awk 'BEGIN {FS = "p"} ; $1 >= 6.9 && $2 >= 1')
+echo "False positive test compiled.";
+echo ""
+sleep 1
+echo "Running test.."
+sleep 1
+echo ""
+
+if [ -n $OPENSSH_TEST ]; then
+echo "Not a Windigo - Ebury infection... Some other stuff..."
+fi

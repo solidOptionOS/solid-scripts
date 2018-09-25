@@ -294,11 +294,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
   		sudo dpkg --add-architecture i386
   		echo -e $GREEN"Complete."$ENDCOLOR;
   		echo ""
-<<<<<<< HEAD
- 	fi	
-=======
 	fi
->>>>>>> a9be25a053266dfa4303f08a45de704732d392f4
 	if [[ $addedArch = "amd64" ]] ; then
 
 		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  

@@ -1,0 +1,5 @@
+#!/bin/bash
+URL='https://scottlinux.com/2015/09/01/use-kali-linux-through-tor-with-whonix-gateway/'
+[[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
+echo "Can't find browser"

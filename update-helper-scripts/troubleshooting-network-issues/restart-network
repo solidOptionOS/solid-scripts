@@ -1,0 +1,44 @@
+#!/bin/bash
+echo "Restarting Network";
+echo ""
+sleep 1
+echo "[sudo /etc/init.d/networking stop]";
+sudo /etc/init.d/networking stop
+sleep 1
+echo "[sudo /etc/init.d/network-manager stop]";
+sudo /etc/init.d/network-manager stop
+sleep 1
+echo "[sudo /etc/init.d/networking start]";
+sudo /etc/init.d/networking start
+sleep 1
+echo "[sudo /etc/init.d/network-manager start]";
+sudo /etc/init.d/network-manager start
+sleep 1
+echo "[sudo /etc/init.d/networking restart]";
+sudo /etc/init.d/networking restart
+sleep 1
+echo "[sudo /etc/init.d/network-manager restart]";
+sudo /etc/init.d/network-manager restart
+sleep 1
+echo "[sudo ifconfig eth0 down]";
+sudo ifconfig eth0 down
+sleep 1
+echo "[sudo ifconfig wlan0 down]";
+sudo ifconfig wlan0 down 
+sleep 1
+echo "[sudo ifconfig wlan1 down]";
+sudo ifconfig wlan1 down
+sleep 1
+echo "[sudo ifconfig eth0 up]";
+sudo ifconfig eth0 up
+sleep 1
+echo "[sudo ifconfig wlan0 up]";
+sudo ifconfig wlan0 up
+sleep 1
+echo "[sudo ifconfig wlan1 up]";
+sudo ifconfig wlan1 up
+sleep 1
+sudo ifconfig
+sudo iwconfig
+echo "Done.";
+

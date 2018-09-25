@@ -78,6 +78,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias ls='ls --color=auto'
     alias ll='ls -Al --color=auto'
     alias lz='ls -Zla --color=auto'
+    alias goto-scripts='cd ~/optionZ3ro --color=auto'
 
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
@@ -114,8 +115,3 @@ BROWSER=firefox
 
 # screenFetch
 screenfetch
-
-# some more ls aliases
-alias xclip='xclip -selection clipboard -c'
-alias goto-solid-scripts='/root/solid-scripts'
-alias git-quick-commit='git add * && git commit -m \"quick-update\" && git push'
