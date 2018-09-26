@@ -22,30 +22,60 @@ echo -e $YELLOW"Initiate Monitor Mode"$ENDCOLOR;
 
 echo -e $BLUE"Initiating Monitor Mode... "$ENDCOLOR;
 sleep 2
-
-echo -e $YELLOW"Select Interface: "$ENDCOLOR;
+sudo ifconfig
+sudo iwconfig
+echo ""
+echo -e $YELLOW"Select Interface 1: "$ENDCOLOR;
 read INTERFACE
+echo -e $YELLOW"Select Interface 2: [Leave blank if none] "$ENDCOLOR;
+read INTERFACE2
+echo -e $YELLOW"Select Interface 3: [Leave blank if none] "$ENDCOLOR;
+read INTERFACE3
 sleep 1
 echo -e $BLUE"[ifconfig]Taking down $INTERFACE "$ENDCOLOR;
 sudo ifconfig $INTERFACE down
+echo -e $BLUE"[ifconfig]Taking down $INTERFACE2 "$ENDCOLOR;
+sudo ifconfig $INTERFACE2 down
+echo -e $BLUE"[ifconfig]Taking down $INTERFACE3 "$ENDCOLOR;
+sudo ifconfig $INTERFACE3 down
 sleep 1
-echo -e $BLUE"[macchanger]Changing MAC Address "$ENDCOLOR;
+
+echo -e $BLUE"[macchanger]Changing MAC Addresses "$ENDCOLOR;
 sudo macchanger $INTERFACE -bra
+sudo macchanger $INTERFACE2 -bra
+sudo macchanger $INTERFACE3 -bra
+echo ""
 sleep 1
-echo -e $BLUE"[iw]Setting $INTERFACE to monitor mode "$ENDCOLOR;
+echo -e $BLUE"[iw]Setting Interfaces to monitor mode "$ENDCOLOR;
 sudo iw dev $INTERFACE set type monitor
+sudo iw dev $INTERFACE2 set type monitor
+sudo iw dev $INTERFACE3 set type monitor
+sleep 1
+echo ""
+echo -e $BLUE"[iwconfig]Setting txpower to 3000 "$ENDCOLOR;
+sudo iwconfig $INTERFACE txpower 3000
+sudo iwconfig $INTERFACE2 txppwer 3000
+sudo iwconfig $INTERFACE3 txpower 3000
+sleep 1
+echo ""
+
 #ifconfig $INTERFACE arp multicast allmulti promisc mtu 1492 0.0.0.0 0.0.0.0 && dhclient
-sleep 1
-echo -e $BLUE"[ifconfig]Setting $INTERFACE to promisc mode "$ENDCOLOR;
-sudo ifconfig $INTERFACE promisc
-sleep 1
+#sleep 1
+#echo -e $BLUE"[ifconfig]Setting $INTERFACE to promisc mode "$ENDCOLOR;
+#sudo ifconfig $INTERFACE promisc
+
+#sleep 1
 echo -e $BLUE"ifconfig]Raising $INTERFACE back up "$ENDCOLOR;
 sudo ifconfig $INTERFACE up
+sudo ifconfig $INTERFACE2 up
+sudo ifconfig $INTERFACE3 up
 sleep 1
-echo -e $BLUE"[iw]Info for $INTERFACE: "$ENDCOLOR;
-sudo iw $INTERFACE info
+
+echo -e $BLUE"[iw]Info for interfaces: "$ENDCOLOR;
+sudo iw dev
+sudo ifconfig 
 sleep 1
-echo -e $YELLOW"$INTERFACE successfully set to monitor mode. "$ENDCOLOR;
+echo -e $YELLOW"Interfaces successfully set to monitor mode. "$ENDCOLOR;
 echo ""
 echo ""
 echo -e $RED"###############################################"$ENDCOLOR
