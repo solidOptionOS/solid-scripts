@@ -23,6 +23,5 @@ echo ""
 echo "sync; echo 3 > /proc/sys/vm/drop_caches "
 sync; echo 3 > /proc/sys/vm/drop_caches 
 echo ""
-slepp 1
 echo "Complete"
 echo ""

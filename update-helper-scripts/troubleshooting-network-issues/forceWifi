@@ -1,3 +1,0 @@
-#!/bin/bash
-sudo /sbin/wpa_supplicant -P /var/run/wpa_supplicant.wlan0.pid -i wlan0 \
--D nl80211,wext -c /etc/wpa_supplicant/wpa_supplicant.conf
