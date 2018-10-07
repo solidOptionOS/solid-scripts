@@ -60,6 +60,41 @@ HOMEPATH=${HOMEPATH:-$homepath_default}
 echo ""
 echo -e $BLUE"Your home path is set to $HOMEPATH/."$ENDCOLOR;
 echo ""
+
+bashrc_default="Y"
+read -p "Would you like to update your bashrc from SolidOptionOS cache? " bashrc_default
+bashrc=${bashrc:-$bashrc_default}
+
+if [[ $bashrc = "bashrc_default" || $bashrc = 'y' ]] ; then
+
+  echo ""
+  echo -e $BLUE"Backing up original bashrc.."$ENDCOLOR;
+  echo ""
+  sudo cp $HOMEPATH/.bashrc $HOMEPATH/.bashrc.backup
+  echo -e $YELLOW"Backup complete."$ENDCOLOR;
+  echo ""
+  sleep 1
+
+  echo -e $BLUE"Updating bashrc with SolidOptionOS bashrc.."$ENDCOLOR;
+  echo ""
+  sudo cp $HOMEPATH/solid-scripts/post-install-scripts/assets/bashrc $HOMEPATH/.bashrc
+  echo -e $YELLOW"Complete."$ENDCOLOR;
+  echo ""
+  
+  echo -e $BLUE"Sourcing new bashrc.."$ENDCOLOR;
+  echo ""
+  source $HOMEPATH/.bashrc
+  echo -e $YELLOW"Complete."$ENDCOLOR;
+  echo ""
+
+else
+ 
+  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+  echo ""
+
+fi
+
+
 aliases_default="Y"
 read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
 aliases=${aliases:-$aliases_default}
@@ -91,7 +126,7 @@ if [[ $netmanage = "netmanage_default" || $netmanage = "y" ]] ; then
 
   echo -e $BLUE"Installing Network-Manager.."$ENDCOLOR;
   echo ""
-  sudo apt-get install network-manager -y
+  sudo apt install network-manager -y
   echo ""
 	
   echo -e $BLUE"Modifying NetworkManager.conf to allow for managed interfaces.."$ENDCOLOR;
@@ -128,8 +163,8 @@ if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
   echo -e $BLUE"Backing up original sources.list file in /root/backup.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo mkdir -p /root/backup/sources
-  sudo cp -rf /etc/apt/ /root/backup/sources/
+  sudo mkdir -p $HOMEPATH/backup/sources
+  sudo cp -rf /etc/apt/ $HOMEPATH/backup/sources/
   echo -e $GREEN"The entire /etc/apt folder has been backed up to /root/backup/sources/"$ENDCOLOR;
   echo ""
 	
@@ -196,7 +231,7 @@ if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
   echo -e $BLUE"Installing openssh-server.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo apt-get update && sudo apt-get install openssh-server -y
+  sudo apt update && sudo apt install openssh-server -y
   echo -e $GREEN"Complete."$ENDCOLOR;
   echo ""
 
@@ -205,11 +240,11 @@ if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
 
   if [[ ! -e /etc/ssh/oldies ]] ; then
 
-	sudo mkdir /etc/ssh/oldies
+	sudo mkdir /etc/ssh/old-keys
 
   fi
 
-  sudo mv /etc/ssh/ssh_host* /etc/ssh/oldies
+  sudo mv /etc/ssh/ssh_host* /etc/ssh/old-keys
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo ""
@@ -240,14 +275,14 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 
 	echo -e $BLUE"Adding multiarch-support.."$ENDCOLOR;
 	echo ""
-	sudo apt-get install multiarch-support -y
+	sudo apt install multiarch-support -y
 	echo ""
 
   	addedArch_default="i386"
   	read -p "If you want to add any additional architectures, enter them here [$addedArch_default, armhf, amd64, etc.]"
  	addedArch=${addedArch:-$addedArch_default}
 
-	if [[ $addedArch = "addedArch_default" || $multiarch = "i386" ]]; then
+	if [[ $addedArch = "addedArch_default" || $multiarch = 'i386' ]]; then
 
   		echo -e $BLUE"Adding i386 architecture.."$ENDCOLOR;
   		echo ""
@@ -255,7 +290,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
   		echo -e $GREEN"Complete."$ENDCOLOR;
   		echo ""
  	fi	
-	if [[ $addedArch = "amd64" ]] ; then
+	if [[ $addedArch = 'amd64' ]] ; then
 
 		echo -e $BLUE"Adding amd64 architecture.."$ENDCOLOR;	  
 		echo ""
@@ -263,7 +298,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
 	fi
-	if [[ $addedArch = "armhf" ]] ; then 
+	if [[ $addedArch = 'armhf' ]] ; then 
 
 		echo -e $BLUE"Adding armhf architecture.."$ENDCOLOR;
 		echo ""
@@ -271,7 +306,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
 	fi
-	if [[ $addedArch = "arm" ]] ; then
+	if [[ $addedArch = 'arm' ]] ; then
 
 		echo -e $BLUE"Adding arm architecture .."$ENDCOLOR;
 		echo ""
@@ -299,11 +334,11 @@ if [[ $upandup = "upandup_default" || $upandup = 'y' ]]; then
   echo -e $BLUE"Updating and upgrading.."$ENDCOLOR;
   echo ""
   sudo dpkg --configure -a
-  sudo apt-get update
-  sudo apt-get -f install -y
-  sudo apt-get autoremove -y
-  sudo apt-get upgrade -y
-  sudo apt-get dist-upgrade
+  sudo apt update
+  sudo apt -f install -y
+  sudo apt autoremove -y
+  sudo apt upgrade -y
+  sudo apt dist-upgrade
   echo ""
   echo -e $GREEN"Success! Your system is now up-to-date."$ENDCOLOR;
   echo ""
@@ -323,28 +358,25 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
  
   echo -e $BLUE"Listing preferred extras.."$ENDCOLOR;
   echo ""
-  echo -e $YELLOW"The following will be installed first:  lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark aircrack-ng-dbgsym adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gpart gparted scrot lsb-release gcc g++ build-essential kbuild cmake make"$ENDCOLOR;
+  echo -e $YELLOW"The following will be installed first:  lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark aircrack-ng adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild"$ENDCOLOR;
   echo ""
-  echo -e $YELLOW"Then the following will be installed next:  firmware-ralink firmware-atheros firmware-realtek bash-completion monodevelop"$ENDCOLOR;
+  echo -e $YELLOW"Then the following will be installed next:  firmware* "$ENDCOLOR;
   echo ""
-  echo -e $YELLOW"Then finally the following will be installed: flashplugin-nonfree"$ENDCOLOR;
-  echo ""
-  sleep 3
-  echo ""
-
-  echo -e $BLUE"Installing..."$ENDCOLOR;
+  
+  echo -e $BLUE"First we will update / install linux-headers-$(uname -r)."$ENDCOLOR;
   echo ""
 
   # Temporarily disabling linux-headers-$(uname -r) install
-  # sudo apt-get install linux-headers-$(uname -r)
- 
+  sudo apt install linux-headers-$(uname -r)
+  echo -e $YELLOW"Complete."$ENDCOLOR;
   echo ""
-  sudo apt-get install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make 
+  sleep 1
+
+  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild
   echo ""
-  sudo apt-get install firmware-ralink firmware-atheros firmware-realtek bash-completion 
+  sudo apt install firmware* -y
   echo ""
-  sudo apt-get install flashplugin-nonfree
-  sudo update-flashplugin-nonfree --install
+  sudo apt install gpart -y
   echo ""
   echo -e $GREEN"Complete."$ENDCOLOR;
   echo ""
@@ -353,9 +385,18 @@ else
 
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
-  echo ""
 
 fi 
+
+echo -e $BLUE"Reconfiguring wireshark.."$ENDCOLOR;
+echo ""
+sudo dpkg-reconfigure wireshark-common
+echo ""
+
+echo -e $BLUE"Changing permissions of dumpcap.."$ENDCOLOR;
+echo ""
+sudo chmod a+x /etc/sbin/dumpcap
+
 NEWUSER_DEFAULT="Y"
 read -p "Would you like to create a standard user? [$NEWUSER_DEFAULT/n] " NEWUSER_DEFAULT
 NEWUSER=${NEWUSER:-$NEWUSER_DEFAULT}
@@ -406,7 +447,10 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo -e $BLUE"Adding $USERNAME to wireshark group."$ENDCOLOR;
   sudo usermod -aG wireshark $USERNAME
   echo ""
-
+  
+  echo -e $BLUE"Adding $USERNAME to kismet group."$ENDCOLOR;
+  sudo usermod -aG kismet $USERNAME 
+  
   echo -e $BLUE"Updating $USERNAME shell to /bin/bash.."$ENDCOLOR;
   sudo usermod -s /bin/bash $USERNAME
   echo ""
@@ -476,7 +520,7 @@ if [[ $addapt = "addapt_default" || $addapt = "y" ]] ; then
   echo -e $BLUE"Installing software-properties-common and apt-file.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo apt-get install software-properties-common apt-file -y
+  sudo apt install software-properties-common apt-file -y
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo ""
@@ -553,7 +597,7 @@ if [[ $CHAT = "Y" || $CHAT = "y" ]] ; then
   echo -e $BLUE"Adding ppa:noobslab/themes.."$ENDCOLOR;
   echo ""
   sudo /usr/sbin/add-apt-repository ppa:upubuntu-com/chat
-  sudo apt-get update
+  sudo apt update
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo ""
@@ -598,7 +642,7 @@ if [[ $airmon = "airmon_default" || $airmon = "y" ]] ; then
   echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo apt-get install --reinstall aircrack-ng
+  sudo apt install --reinstall aircrack-ng
   echo ""
   echo ""
   echo -e $BLUE"Backing up airmon-ng.."$ENDCOLOR;
@@ -652,7 +696,7 @@ if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
 
   echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
   echo ""
-  sudo apt-get install bc scrot lsb-release -y
+  sudo apt install bc scrot lsb-release screenfetch -y
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo -e $YELLOW"Installing and setting up screenfetch.."$ENDCOLOR;
@@ -682,7 +726,7 @@ if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
     echo ""
     echo ""
 
-    echo -e $YELLOW"Setting as executable in /usr/bin.."$ENDCOLOR;
+    echo -e $YELLOW"Setting as executable in /usr/local/bin.."$ENDCOLOR;
     echo ""
     sudo chmod +x /usr/local/bin/screenfetch
     echo -e $GREEN"Done."$ENDCOLOR;
@@ -792,10 +836,12 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
         
   fi
 
-  echo -e $BLUE"Creating backup directory.."$ENDCOLOR;
+  echo -e $BLUE"Creating backup directory and capture directories.."$ENDCOLOR;
   echo ""
   mkdir -p $HOMEPATH/backup
   sudo mkdir -p /captures/hs
+  sudo mkdir -p /captures/wireshark
+
   cd $HOMEPATH/backup
   echo ""
   echo ""
@@ -831,11 +877,11 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
     echo -e $BLUE"Updating and Upgrading.."$ENDCOLOR;
     echo ""
     sudo dpkg --configure -a
-    sudo apt-get autoremove
-    sudo apt-get update
-    sudo apt-get install -f
-    sudo apt-get upgrade
-    sudo apt-get dist-upgrade
+    sudo apt autoremove
+    sudo apt update
+    sudo apt install -f
+    sudo apt upgrade
+    sudo apt dist-upgrade
     echo ""
     echo ""
 	
@@ -854,7 +900,7 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
     echo -e $BLUE"Installing prerequisites.."$ENDCOLOR;
     echo ""
-    sudo apt-get install wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
+    sudo apt install wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
     echo ""
     echo ""	
 
@@ -1047,7 +1093,7 @@ if [[ $htop = "htop_default" || $htop = "y" ]] ; then
 
   echo -e $BLUE"Installing htop.."$ENDCOLOR;
   echo ""
-  sudo apt-get install htop -y
+  sudo apt install htop -y
   echo ""
   echo -e $BLUE"Upgrading htop style.."$ENDCOLOR;
   sudo mkdir -p $HOMEPATH/.config/htop	
@@ -1057,7 +1103,7 @@ if [[ $htop = "htop_default" || $htop = "y" ]] ; then
      sudo mkdir -p $HOMEPATH/.config/htop
 	
   fi
-
+  sudo mkdir -p $HOMEPATH/.config/htop/htoprc
   sudo cp $HOMEPATH/solid-scripts/assets/htoprc $HOMEPATH/.config/htop/htoprc
   echo ""
   echo -e $GREEN"Success! Htop style upgraded."$ENDCOLOR;
@@ -1079,7 +1125,7 @@ if [[ $oui = "oui_default" || $oui = "y" ]] ; then
 
   echo -e $BLUE"Updating.."$ENDCOLOR;
   echo ""
-  sudo apt-get install ieee-data
+  sudo apt install ieee-data
   echo "" 
   sudo airodump-ng-oui-update
   sudo update-ieee-data
@@ -1141,4 +1187,3 @@ echo ""
 echo -e $BLUE"#################################"$ENDCOLOR;
 echo -e $YELLOW"#      Operation Complete.       #"$ENDCOLOR;
 echo -e $BLUE"#################################"$ENDCOLOR;
-echo ""
