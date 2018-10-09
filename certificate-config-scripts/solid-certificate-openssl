@@ -136,11 +136,11 @@ openssl pkcs12 -export -out mycert.pfx -in mycert.pem -name "Application"
 
 echo -e $BLUE "Generating Certificate and Private key Request... "$ENDCOLOR; 
 sleep 0.5
-copenssl req -new -newkey rsa:1024 -nodes -keyout mykey.pem -out myreq.pem
+openssl req -new -newkey rsa:1024 -nodes -keyout mykey.pem -out myreq.pem
 
 echo -e $BLUE "Signature Verification: "$ENDCOLOR; 
 sleep 0.5
-penssl req -in myreq.pem -noout -verify -key mykey.pem
+openssl req -in myreq.pem -noout -verify -key mykey.pem
 
 echo -e $BLUE "Information Verification: "$ENDCOLOR; 
 sleep 0.5
