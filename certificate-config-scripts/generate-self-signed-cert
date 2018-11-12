@@ -1,0 +1,12 @@
+#!/bin/bash
+# Generate self signed cert
+openssl req -new -x509 -nodes -out client.crt -keyout client.key -subj /CN=Moi/O=Foo/C=NL
+
+# Start a server
+openssl s_server -cipher AES256-SHA -accept 4443 -www -CAfile client.crt -verify 1 -key server.pem -cert server.cert
+
+# And test
+printf 'GET / HTTP/1.0\r\n\r\n' | openssl s_client -connect localhost:4443 -ssl3 -cert client.pem -key client.key -ign_eof
+
+# tshark commands
+tshark -o "ssl.desegment_ssl_records: TRUE" -o "ssl.desegment_ssl_application_data: TRUE" -o "ssl.keys_list: 127.0.0.1,4443,http,/home/dirkx/xx/privkey.pem" -o "ssl.debug_file: /home/dirkx/.wireshark-log" -i eth0 -R "tcp.port == 4443"
