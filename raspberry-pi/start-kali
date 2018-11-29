@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## start networking after boot - RUN MANUALLY...for now.
+
+# cycling netwoking, networkmanaer services and protocols
+/etc/init.d/networking stop && /etc/init.d/network-manager stop &&  /etc/init.d/networking start && systemctl start networking  && /etc/init.d/network-manager start && /etc/init.d/resolv restart && /etc/init.d/resolv force-reload 
+
+# boucing interfaces
+echo "bounching interfaces, anonyomizing mac addresses, and increaoing the txpower... "
+echo ""
+ifconfig eth0 down
+ifconfig eth0 up
+
+ifconfig wlan0 down
+iwconfig wlan0 txpower 3000 
+macchanger -bra wlan0
+ifconfig wlan0 up
+
+ifconfig wlan1 down 
+iwconfig wlan1 txpwoer 3000
+macchanger -bra wlan1
+ifconfig wlan1 up
+
+echo "Complete"
+echo ""
+sleep 1
+
+# testing
+echo "Testing.."
+ping google.com 
+sleep 10
+
