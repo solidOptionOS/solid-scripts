@@ -1,0 +1,3 @@
+n (token, config) {
+        if (!hasOwnProp(regexes, token)) {
+            return new 
