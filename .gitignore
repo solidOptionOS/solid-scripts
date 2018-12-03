@@ -1,3 +1,5 @@
 *.zip
 *.rar
 *.xz
+nvidia-*
+*main-d9*
