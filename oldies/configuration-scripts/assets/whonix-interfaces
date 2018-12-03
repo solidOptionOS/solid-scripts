@@ -1,0 +1,5 @@
+
+            // matching against regexp is expensive, do it on demand
+            match = null,
+            sign,
+           
