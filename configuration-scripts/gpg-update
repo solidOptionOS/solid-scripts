@@ -5,4 +5,10 @@ sleep 10
 wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb
 apt install ./kali-archive-keyring_2018.1_all.deb
 
+gpg --keyserver keys.gnupg.net --recv 886DDD89
+gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
 
+gpg --keyserver keys.gnupg.net --recv F0B5D826
+gpg --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add - 
+gpg --keyserver keys.gnupg.net --recv E06E6293
+gpg --export DED04C8CBB517AE45B073F12A5D712AEE06E6293 | sudo apt-key add - 
