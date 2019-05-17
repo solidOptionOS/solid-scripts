@@ -107,7 +107,6 @@ if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
   touch $HOMEPATH/.bash_aliases
   echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
   echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
-  echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> $HOMEPATH/.bash_aliases
  
   echo ""
 
@@ -176,8 +175,8 @@ if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
 deb http://http.kali.org/kali kali-rolling main contrib non-free
 deb-src http://http.kali.org/kali kali-rolling main contrib non-free
 # Kali-Dev Repos
-#deb http://http.kali.org/kali kali-dev main contrib non-free
-#deb-src http://http.kali.org/kali kali-dev main contrib non-free
+deb http://http.kali.org/kali kali-dev main contrib non-free
+deb-src http://http.kali.org/kali kali-dev main contrib non-free
 # Kali-Bleeding-Edge
 #deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free
 #deb-src http://http.kali.org/kali kali-bleeding-edge main contrib non-free
@@ -188,8 +187,20 @@ EOF
   echo -e $BLUE"Adding PGP keys.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo gpg –keyserver pgpkeys.mit.edu –recv-key ED444FF07D8D0BF6
-  sudo gpg -a –export ED444FF07D8D0BF6| sudo apt-key add –
+ # wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
+
+ #sleep 1
+ #wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb
+ #sudo apt install ./kali-archive-keyring_2018.1_all.deb
+  sudo apt-get install kali-archive-keyring
+  sudo gpg --keyserver keys.gnupg.net --recv 886DDD89
+  sudo gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+  sudo gpg --keyserver keys.gnupg.net --recv F0B5D826
+  sudo gpg --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add - 
+  sudo gpg --keyserver keys.gnupg.net --recv E06E6293
+  sudo gpg --export DED04C8CBB517AE45B073F12A5D712AEE06E6293 | sudo apt-key add - 
+  sudo gpg --keyserver pgpkeys.mit.edu --recv-key ED444FF07D8D0BF6
+  sudo gpg --export ED444FF07D8D0BF6 | sudo apt-key add -
   echo ""
   echo -e $GREEN"PGP Keys successfully added."$ENDCOLOR;
   echo ""
@@ -207,7 +218,7 @@ read -p "Do you want to enable Kali Bleeding-Edge Repos? [$bleeding_default,n] "
 bleeding=${bleeding:-$bleeding_default}
 
 if [[ $bleeding = "bleeding_default" || $bleeding = "y" ]] ; then
-
+  sudo install sed -y
   sudo sed -i 's/\#deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
   sudo sed -i 's/\#deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
   echo ""
@@ -231,7 +242,7 @@ if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
   echo -e $BLUE"Installing openssh-server.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo apt update && sudo apt install openssh-server -y
+  sudo apt update && sudo apt install ssh openssh-server -y
   echo -e $GREEN"Complete."$ENDCOLOR;
   echo ""
 
@@ -314,6 +325,24 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 		echo -e $GREEN"Complete."$ENDCOLOR;
 		echo ""
 
+	fi
+	if [[ $addedArch = 'aarch64' ]] ; then
+		
+		echo -e $BLUE"Adding aarch63 architecture .."$ENDCOLOR;
+		echo ""
+		sudo dpkg --add-architecture aarch64
+		echo -e $GREEN"Complete."$ENDCOLOR;
+		echo ""
+
+	fi
+	if [[ $addedArch = 'arm64' ]] ; then
+		
+		echo -e $BLUE"Adding arm64 architecture.."$ENDCOLOR;
+		echo ""
+		sudo dpkg --add-architecture arm64
+		echo -e $GREEN"Complete."$ENDCOLOR;
+		echo ""
+
 	fi	
 
 else
@@ -334,11 +363,13 @@ if [[ $upandup = "upandup_default" || $upandup = 'y' ]]; then
   echo -e $BLUE"Updating and upgrading.."$ENDCOLOR;
   echo ""
   sudo dpkg --configure -a
-  sudo apt update
-  sudo apt -f install -y
-  sudo apt autoremove -y
-  sudo apt upgrade -y
-  sudo apt dist-upgrade
+  sudo apt-get update --fix-missing
+  sudo apt-get update
+  sudo apt-get -f install
+  sudo apt-get --fix-broken install
+  sudo apt-get autoremove
+  sudo apt-get upgrade
+  sudo apt-get dist-upgrade
   echo ""
   echo -e $GREEN"Success! Your system is now up-to-date."$ENDCOLOR;
   echo ""
@@ -358,9 +389,9 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
  
   echo -e $BLUE"Listing preferred extras.."$ENDCOLOR;
   echo ""
-  echo -e $YELLOW"The following will be installed first:  lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark aircrack-ng adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild"$ENDCOLOR;
+  echo -e $YELLOW"The following will be installed first:  lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark wireshark-dev wireshark-common wireshark-gtk adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework  ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild bully pyrit"$ENDCOLOR;
   echo ""
-  echo -e $YELLOW"Then the following will be installed next:  firmware* "$ENDCOLOR;
+  echo -e $YELLOW"Then the following will be installed next:  firmware-ralink firmware-ath9k-htc firmware-realtek firmware-atheros "$ENDCOLOR;
   echo ""
   
   echo -e $BLUE"First we will update / install linux-headers-$(uname -r)."$ENDCOLOR;
@@ -372,11 +403,11 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
   echo ""
   sleep 1
 
-  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild
+  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark wireshark-dev wireshark-common wireshark-gtk adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework  ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild bully pyrit 
   echo ""
-  sudo apt install firmware* -y
+  sudo apt install firmware-ralink firmware-realtek firmware-ath9k-htc firmware-atheros
   echo ""
-  sudo apt install gpart -y
+  sudo apt install gpart 
   echo ""
   echo -e $GREEN"Complete."$ENDCOLOR;
   echo ""
@@ -395,7 +426,7 @@ echo ""
 
 echo -e $BLUE"Changing permissions of dumpcap.."$ENDCOLOR;
 echo ""
-sudo chmod a+x /etc/sbin/dumpcap
+sudo chmod a+x /usr/bin/dumpcap
 
 NEWUSER_DEFAULT="Y"
 read -p "Would you like to create a standard user? [$NEWUSER_DEFAULT/n] " NEWUSER_DEFAULT
@@ -467,12 +498,12 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo ""
   echo ""
   clonebashrc_default="Y"	
-  read -p "Do you want to add bash_aliases to $USERNAME? [$clonebashrc_default/n] " clonebashrc_default
+  read -p "Do you wish to clone bashrc and bash_aliases to $USERNAME? [$clonebashrc_default/n] " clonebashrc_default
   clonebashrc=${clonebashrc:-$clonebashrc_default}
 
   if [[ $clonebashrc = "clonebashrc_default" || $clonebashrc = "y" ]] ; then 
 	
-    echo -e $BLUE"Adding bash_aliases to /home/$USERNAME/.bashrc_aliases.."$ENDCOLOR;
+    echo -e $BLUE"Cloning bashrc and bash_aliases to /home/$USERNAME/.."$ENDCOLOR;
     echo ""
     echo -e $BLUE"Backing up first.."$ENDCOLOR; 
     echo ""
@@ -483,10 +514,11 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
     echo ""
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""
-    echo -e $BLUE"Copying bash_aliases from current user.."$ENDCOLOR;
+    echo -e $BLUE"Cloning bash_aliases from current user.."$ENDCOLOR;
     echo ""
+    sudo cp /root/,bashrc /home/$USERNAME/.bashrc
     sudo cp /root/.bash_aliases /home/$USERNAME/.bash_aliases
-    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bash_aliases
+    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bash*
     echo -e $GREEN"Complete."$ENDCOLOR;
     echo ""
     echo -e $GREEN"$USERNAME Setup Complete."$ENDCOLOR;
@@ -696,7 +728,7 @@ if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
 
   echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
   echo ""
-  sudo apt install bc scrot lsb-release screenfetch -y
+  sudo apt install bc libssl-dev opencl-headers scrot lsb-release screenfetch -y
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
   echo -e $YELLOW"Installing and setting up screenfetch.."$ENDCOLOR;
@@ -845,6 +877,25 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   cd $HOMEPATH/backup
   echo ""
   echo ""
+  
+  echo -e $BLUE"Cloning hcxdumptool repository"$ENDCOLOR;
+  echo ""
+  git clone https://github.com/ZerBea/hcxdumptool.git
+  echo "" 
+  echo ""
+
+  echo -e $BLUE"Cloning hcxtools repository"$ENDCOLOR;
+  echo ""
+  git clone https://github.com/ZerBea/hcxtools.git
+  echo ""
+  echo ""
+
+  echo -e $BLUE"Cloning hashcat repository"$ENDCOLOR;
+  echo ""
+  git clone https://github.com/hashcat/hashcat.git
+  echo ""
+  echo ""
+
 
   echo -e $BLUE"Cloning wifite repository"$ENDCOLOR;
   echo ""
@@ -901,6 +952,7 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
     echo -e $BLUE"Installing prerequisites.."$ENDCOLOR;
     echo ""
     sudo apt install wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
+    sudo apt-get install libcurl4-openssl-dev libssl-dev zlib1g-dev
     echo ""
     echo ""	
 
@@ -913,7 +965,7 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
   echo -e $BLUE"Installing pixiewps.."$ENDCOLOR;
   echo ""
-  cd $HOMEPATH/backup/pixiewps/src/
+  cd $HOMEPATH/backup/pixiewps/
   make
   echo ""
   sudo make install
@@ -945,11 +997,21 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   echo ""
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
+  
+  cd $HOMEPATH/backup/hcxdumptool
+  make
+  sudo make install
+  echo ""
 
-  echo -e $BLUE"Adding modified wifite and wifite-ng to /usr/bin.."$ENDCOLOR;
-  echo ""	
-  sudo cp $HOMEPATH/backup/wifite/wifite.py /usr/bin/wifite
-  sudo chmod +x /usr/bin/wifite
+  cd $HOMEPATH/backup/hcxtools
+  make
+  sudo make install
+  echo ""
+
+  #echo -e $BLUE"Adding modified wifite and wifite-ng to /usr/bin.."$ENDCOLOR;
+  #echo ""	
+  #sudo cp $HOMEPATH/backup/wifite/wifite.py /usr/bin/wifite
+  #sudo chmod +x /usr/bin/wifite
   sudo cp $HOMEPATH/backup/wifite-mod-pixiewps/wifite-ng /usr/bin/wifite-ng
   sudo chmod +x /usr/bin/wifite-ng
   echo ""
@@ -957,8 +1019,8 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   echo -e $BLUE"Patching wfite-ng.."$ENDCOLOR;
   echo ""
   sudo cp $HOMEPATH/solid-scripts/assets/wifite-ng-patch /usr/bin/wifite-ng
-  sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite
-  sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite
+#  sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite
+#  sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite
   sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite-ng
   sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite-ng
   echo ""
