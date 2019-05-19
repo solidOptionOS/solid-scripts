@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo -- bash -c 'echo "Please enter new Hostname"; old=$(hostname);read host; \
+sed -i.$(date "+%H%M%S%d%m%y") -e "s:$old:$host:g" /etc/hostname;  \
+sed -i.$(date "+%H%M%S%d%m%y") -e "s:$old:$host:g" /etc/hosts; \
+hostnamectl set-hostname $host; echo "Old Name:$old and New Name is:$host"'
