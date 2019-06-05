@@ -188,7 +188,7 @@ EOF
   echo -e $BLUE"Adding PGP keys.."$ENDCOLOR;
   echo ""
   echo ""
-  sudo gpg –keyserver pgpkeys.mit.edu –recv-key ED444FF07D8D0BF6
+  sudo gpg –keyserverpgppkeys.mit.edu –recv-key ED444FF07D8D0BF6
   sudo gpg -a –export ED444FF07D8D0BF6| sudo apt-key add –
   echo ""
   echo -e $GREEN"PGP Keys successfully added."$ENDCOLOR;
