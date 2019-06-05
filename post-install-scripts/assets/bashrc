@@ -120,3 +120,5 @@ screenfetch
 alias xclip='xclip -selection clipboard -c'
 alias ..='cd ..'
 alias sourceh='source ~/.bashrc'
+alias l='ls'
+alias chkconfig='sysv-rc-conf'

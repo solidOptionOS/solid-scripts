@@ -61,6 +61,13 @@ echo ""
 echo -e $BLUE"Your home path is set to $HOMEPATH/."$ENDCOLOR;
 echo ""
 
+installpath_default=$HOMEPATH
+read -p "Please set solid-scripts install path (leave out trailing /'s): [$installpath_default] " installpath_default
+INSTALLPATH=${INSTALLPATH:-$installpath_default}
+echo ""
+echo -e $BLUE"Your solid-scripts install path is set to $INSTALLPATH/."$ENDCOLOR;
+echo ""
+
 bashrc_default="Y"
 read -p "Would you like to update your bashrc from SolidOptionOS cache? " bashrc_default
 bashrc=${bashrc:-$bashrc_default}
@@ -77,7 +84,7 @@ if [[ $bashrc = "bashrc_default" || $bashrc = 'y' ]] ; then
 
   echo -e $BLUE"Updating bashrc with SolidOptionOS bashrc.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/solid-scripts/post-install-scripts/assets/bashrc $HOMEPATH/.bashrc
+  sudo cp $INSTALLPATH/solid-scripts/post-install-scripts/assets/bashrc $HOMEPATH/.bashrc
   echo -e $YELLOW"Complete."$ENDCOLOR;
   echo ""
   
@@ -94,29 +101,40 @@ else
 
 fi
 
+echo -e $BLUE"Adding necessities to /usr/local/bin/"$ENDCOLOR;
+echo ""
+sudo cp $INSTALLPATH/solid-scripts/troubleshoot-networking-issues/restart-network /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/setup-hostname-new /usr/local/bin
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update
+echo ""
+echo -e $YELLOW"Complete"$ENDCOLOR;
+echo ""
 
-aliases_default="Y"
-read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
-aliases=${aliases:-$aliases_default}
+#aliases_default="Y"
+#read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
+#aliases=${aliases:-$aliases_default}
 
-if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
+#if [[ $aliases = "aliases_default" || $aliases = 'y' ]] ; then
 	
-  echo ""
-  echo -e $BLUE"Adding aliases to .bashrc.."$ENDCOLOR;
-  echo ""
-  touch $HOMEPATH/.bash_aliases
-  echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
-  echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
-  echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> $HOMEPATH/.bash_aliases
- 
-  echo ""
+#  echo ""
+#  echo -e $BLUE"Adding aliases to .bashrc.."$ENDCOLOR;
+#  echo ""
+#  touch $HOMEPATH/.bash_aliases
+#  echo "alias xclip='xclip -selection c'" >> $HOMEPATH/.bash_aliases
+#  echo "alias goto-solid-scripts='cd $HOMEPATH/solid-scripts/'" >> $HOMEPATH/.bash_aliases
+#  echo "alias xclip='xargs echo -n | xclip -selection clipboard -c'" >> $HOMEPATH/.bash_aliases
+# 
+#  echo ""
 
-else
+#else
 
-  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
+#  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+#  echo ""
 
-fi
+#fi
 
 netmanage_default="Y"
 read -p "Do you want to install Network-Manager and configure the interfaces for easy ifup ifdown? [$netmanage_default,n] " netmanage_default
@@ -126,7 +144,8 @@ if [[ $netmanage = "netmanage_default" || $netmanage = "y" ]] ; then
 
   echo -e $BLUE"Installing Network-Manager.."$ENDCOLOR;
   echo ""
-  sudo apt install network-manager -y
+  sudo apt-get build-dep network-manager network-manager-gnome network-manager-dev network-manager-ssh network-manager-ssh-gnome 
+  sudo apt install network-manager network-manager-gnome  network-manager-dev network-manager-ssh network-manager-ssh-gnome 
   echo ""
 	
   echo -e $BLUE"Modifying NetworkManager.conf to allow for managed interfaces.."$ENDCOLOR;
@@ -147,7 +166,7 @@ else
 
 fi
 rolling_default="Y"
-read -p "Do you want to add Kali-Rolling to your sources? [$rolling_default/n]" rolling_default
+read -p "Do you want to add Kali-Rolling, Kali-Dev, and Kali-Bleeding Edge to your sources? [$rolling_default/n]" rolling_default
 rolling=${rolling:-$rolling_default}
 
 if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
@@ -176,11 +195,11 @@ if [[ $rolling = "rolling_default" || $rolling = "y" ]] ; then
 deb http://http.kali.org/kali kali-rolling main contrib non-free
 deb-src http://http.kali.org/kali kali-rolling main contrib non-free
 # Kali-Dev Repos
-#deb http://http.kali.org/kali kali-dev main contrib non-free
-#deb-src http://http.kali.org/kali kali-dev main contrib non-free
+deb http://http.kali.org/kali kali-dev main contrib non-free
+deb-src http://http.kali.org/kali kali-dev main contrib non-free
 # Kali-Bleeding-Edge
-#deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free
-#deb-src http://http.kali.org/kali kali-bleeding-edge main contrib non-free
+deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free
+deb-src http://http.kali.org/kali kali-bleeding-edge main contrib non-free
 EOF
   echo ""
   echo ""
@@ -202,25 +221,25 @@ else
   echo ""
 
 fi
-bleeding_default="Y"
-read -p "Do you want to enable Kali Bleeding-Edge Repos? [$bleeding_default,n] " bleeding_default
-bleeding=${bleeding:-$bleeding_default}
+#bleeding_default="Y"
+#read -p "Do you want to enable Kali Bleeding-Edge Repos? [$bleeding_default,n] " bleeding_default
+#bleeding=${bleeding:-$bleeding_default}
+#
+#if [[ $bleeding = "bleeding_default" || $bleeding = "y" ]] ; then
+#
+#  sudo sed -i 's/\#deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+#  sudo sed -i 's/\#deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
+#  echo ""
+#  sudo cat /etc/apt/sources.list
+#  echo ""
 
-if [[ $bleeding = "bleeding_default" || $bleeding = "y" ]] ; then
+#else
 
-  sudo sed -i 's/\#deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
-  sudo sed -i 's/\#deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/deb\-src\ http\:\/\/http.kali.org\/kali\ kali\-bleeding\-edge\ main\ contrib\ non\-free/g' /etc/apt/sources.list 
-  echo ""
-  sudo cat /etc/apt/sources.list
-  echo ""
+#  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+#  echo ""
+#  echo""
 
-else
-
-  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
-  echo""
-
-fi
+#fi
 configopenssh_default="Y"
 read -p "Do you want to install and configure openssh-server? [$configopenssh_default,n] " configopenssh_default
 configopenssh=${configopenssh:-$configopenssh_default}
@@ -229,7 +248,6 @@ configopenssh=${configopenssh:-$configopenssh_default}
 if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
 
   echo -e $BLUE"Installing openssh-server.."$ENDCOLOR;
-  echo ""
   echo ""
   sudo apt update && sudo apt install openssh-server -y
   echo -e $GREEN"Complete."$ENDCOLOR;
@@ -247,17 +265,13 @@ if [[ $configopenssh = "configopenssh_default" || $configopenssh = 'y' ]]; then
   sudo mv /etc/ssh/ssh_host* /etc/ssh/old-keys
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
 
   echo -e $BLUE"Reconfiguring openssh-server.."$ENDCOLOR;
-  echo ""
   echo ""
   sudo dpkg-reconfigure openssh-server
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
   echo -e $GREEN"Success! Default ssh keys backed-up and regenerated."$ENDCOLOR;
-  echo ""
   echo ""
 
 else
@@ -275,6 +289,7 @@ if [[ $multiarch = "multiarch_default" || $multiarch = "y" ]]; then
 
 	echo -e $BLUE"Adding multiarch-support.."$ENDCOLOR;
 	echo ""
+	sudo apt-get build-dep multiarch-support
 	sudo apt install multiarch-support -y
 	echo ""
 
@@ -342,7 +357,6 @@ if [[ $upandup = "upandup_default" || $upandup = 'y' ]]; then
   echo ""
   echo -e $GREEN"Success! Your system is now up-to-date."$ENDCOLOR;
   echo ""
-  echo ""
 
 else
 
@@ -351,34 +365,51 @@ else
 
 fi
 extra_default="Y"
-read -p "Would you like to install some preferred extras? WARNING: IF YOU ARE NOT RUNNING KALI 2.0, THIS IS NOT RECOMMENDED. [$extra_default/n] " extra_default
+read -p "Would you like to install some preferred extras? WARNING: IF YOU ARE NOT RUNNING THE MOST RECENT VERSION OF KALI, THIS IS NOT RECOMMENDED. [$extra_default/n] " extra_default
 extra=${extra:-$extra_default}
 
 if [[ $extra = "extra_default" || $extra = "y" ]] ; then
  
-  echo -e $BLUE"Listing preferred extras.."$ENDCOLOR;
-  echo ""
-  echo -e $YELLOW"The following will be installed first:  lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark aircrack-ng adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild"$ENDCOLOR;
-  echo ""
-  echo -e $YELLOW"Then the following will be installed next:  firmware* "$ENDCOLOR;
-  echo ""
-  
-  echo -e $BLUE"First we will update / install linux-headers-$(uname -r)."$ENDCOLOR;
-  echo ""
+  #echo -e $BLUE"First we will update / install linux-headers-$(uname -r)."$ENDCOLOR;
+  #echo ""
 
   # Temporarily disabling linux-headers-$(uname -r) install
-  sudo apt install linux-headers-$(uname -r)
-  echo -e $YELLOW"Complete."$ENDCOLOR;
+  #sudo apt install linux-headers-$(uname -r)
+  #echo -e $YELLOW"Complete."$ENDCOLOR;
+  #echo ""
+  #sleep 1
+  
+  echo -e $BLUE"Installing lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data"$ENDCOLOR; 
   echo ""
-  sleep 1
-
-  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ipsec-tools ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi gparted scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild
+  sudo apt-get build-dep lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
   echo ""
-  sudo apt install firmware* -y
+  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
   echo ""
-  sudo apt install gpart -y
+  echo -e $BLUE"Installing firmware-atheros firmware-realtek firmware-ath9k-htc firmware-ralink"$ENDCOLOR;
+  sudo apt-get build-dep firmware-atheros firmware-realtek firmware-ath9k-htc firmware-ralink 
+  sudo apt-get install firmware-atheros firmeare-realtek firmware-ath9k-htc firmware-ralink
+  echo ""
+  echo -e $BLUE"Installing exfat-fuse exfat-utils f2fs-tools hfsutils hfsprogs jfsutils hfsplus  hfst-ospell hfst-ospell-dev util-linux util-linux-locales cryptcat crypt++el cryptol cryptsetup cryptsetup-bin cryptsetup-initramfs dmsetup nilfs-tools ntfs-3g ntfs-3g-dev reiser4progs reiserfsprogs udfclient  xfsprogs xfsdump lvm2 lvm2-dbusd luksipc btrfs-progs btrfsmaintenance btrfs-compsize btrfs-heatmap btrfs-compsize gpart gparted libreadline-gplv2-dev"$ENDCOLOR; 
+  echo ""
+  sudo apt-get build-dep exfat-fuse exfat-utils f2fs-tools hfsutils hfsprogs jfsutils hfsplus  hfst-ospell hfst-ospell-dev util-linux util-linux-locales cryptcat crypt++el cryptol cryptsetup cryptsetup-bin cryptsetup-initramfs dmsetup nilfs-tools ntfs-3g ntfs-3g-dev reiser4progs reiserfsprogs udfclient  xfsprogs xfsdump lvm2 lvm2-dbusd luksipc btrfs-progs btrfsmaintenance btrfs-compsize btrfs-heatmap btrfs-compsize gpart gparted libreadline-gplv2-dev 
+  echo ""
+  sudo apt-get install exfat-fuse exfat-utils f2fs-tools hfsutils hfsprogs jfsutils hfsplus  hfst-ospell hfst-ospell-dev util-linux util-linux-locales cryptcat crypt++el cryptol cryptsetup cryptsetup-bin cryptsetup-initramfs dmsetup nilfs-tools ntfs-3g ntfs-3g-dev reiser4progs reiserfsprogs udfclient  xfsprogs xfsdump lvm2 lvm2-dbusd luksipc btrfs-progs btrfsmaintenance btrfs-compsize btrfs-heatmap btrfs-compsize gpart gparted libreadline-gplv2-dev
   echo ""
   echo -e $GREEN"Complete."$ENDCOLOR;
+  echo ""
+  
+  echo -e $BLUE"Updating htop style"$ENDCOLOR:
+  sudo mkdir -p $HOMEPATH/.config/htop
+
+  if [[ ! -e $HOMEPATH/.config/htop ]] ; then
+    
+     sudo mkdir -p $HOMEPATH/.config/htop
+
+  fi
+  sudo mkdir -p $HOMEPATH/.config/htop/htoprc
+  sudo cp $INSTALLPATH/solid-scripts/assets/htoprc $HOMEPATH/.config/htop/htoprc
+  echo ""
+  echo -e $GREEN"Success! Htop style upgraded."$ENDCOLOR;
   echo ""
 
 else
@@ -395,7 +426,7 @@ echo ""
 
 echo -e $BLUE"Changing permissions of dumpcap.."$ENDCOLOR;
 echo ""
-sudo chmod a+x /etc/sbin/dumpcap
+sudo chmod a+x /usr/bin/dumpcap
 
 NEWUSER_DEFAULT="Y"
 read -p "Would you like to create a standard user? [$NEWUSER_DEFAULT/n] " NEWUSER_DEFAULT
@@ -408,7 +439,6 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo ""
 	
   echo -e $BLUE"Creating standard user, $USERNAME.."$ENDCOLOR;
-  echo ""
   echo ""
   sudo useradd -m $USERNAME
   echo -e $GREEN"Complete."$ENDCOLOR;
@@ -456,46 +486,27 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
   echo ""
   echo ""
 
-  echo -e $BLUE"Adding $USERNAME to /etc/sudoers.."$ENDCOLOR;
-  sudo sed -i 's/\#\ Allow\ members\ of\ group\ sudo\ to\ execute\ any\ command/'$USERNAME'\	ALL\=\(ALL\:ALL\)\ ALL\' >> /etc/sudoers
-  echo ""
-  sudo cat /etc/sudoers
-
   echo -e $YELLOW"Set a password for $USERNAME.."$ENDCOLOR;
   echo ""
   sudo passwd $USERNAME
   echo ""
-  echo ""
   clonebashrc_default="Y"	
-  read -p "Do you want to add bash_aliases to $USERNAME? [$clonebashrc_default/n] " clonebashrc_default
+  read -p "Do you want to clone root bashrc to $USERNAME? [$clonebashrc_default/n] " clonebashrc_default
   clonebashrc=${clonebashrc:-$clonebashrc_default}
 
   if [[ $clonebashrc = "clonebashrc_default" || $clonebashrc = "y" ]] ; then 
 	
-    echo -e $BLUE"Adding bash_aliases to /home/$USERNAME/.bashrc_aliases.."$ENDCOLOR;
-    echo ""
     echo -e $BLUE"Backing up first.."$ENDCOLOR; 
     echo ""
-    sudo mkdir -p /root/backup
-    echo ""
-    sudo cp /home/$USERNAME/.bashrc /root/backup/.bashrc.bak
-    sudo cp /home/$USERNAME/.bash_aliases /root/backup/.bash_aliases.bak
+    sudo cp /root/.bashrc /home/$USERNAME/.bashrc.bak
+    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bashrc
     echo ""
     echo -e $GREEN"Complete."$ENDCOLOR;
-    echo ""
-    echo -e $BLUE"Copying bash_aliases from current user.."$ENDCOLOR;
-    echo ""
-    sudo cp /root/.bash_aliases /home/$USERNAME/.bash_aliases
-    sudo chown $USERNAME:$USERNAME /home/$USERNAME/.bash_aliases
-    echo -e $GREEN"Complete."$ENDCOLOR;
-    echo ""
-    echo -e $GREEN"$USERNAME Setup Complete."$ENDCOLOR;
     echo ""
 
   else
 
     echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-    echo ""
     echo ""
 	
   fi
@@ -503,7 +514,6 @@ if [[ $NEWUSER = "NEWUSER_DEFAULT" || $NEWUSER = 'y' ]] ; then
 else
 
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
   echo ""
 
 fi
@@ -515,38 +525,33 @@ if [[ $addapt = "addapt_default" || $addapt = "y" ]] ; then
 
   echo -e $BLUE"Installing and configuring add-apt-repository"$ENDCOLOR;
   echo ""
-  echo ""
 
   echo -e $BLUE"Installing software-properties-common and apt-file.."$ENDCOLOR;
   echo ""
-  echo ""
+  sudo apt-get build-dep software-properties-common apt-file
   sudo apt install software-properties-common apt-file -y
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
 
   echo -e $BLUE"Running apt-file update.  This may take a while depending on your system."$ENDCOLOR;
-  echo ""
   echo ""
   sudo apt-file update
   echo ""
 
   echo -e $GREEN"Apt-file is now up to date."$ENDCOLOR;
   echo ""
-  echo ""
 
   echo -e $BLUE"Using apt-file search to find add-apt-repository.."$ENDCOLOR;
   sudo apt-file search add-apt-repository
   echo ""
 
-  echo -e $BLUE"Modifying add-apt-repository with $HOMEPATH/solid-scripts/assets/add-apt-repository in /usr/sbin.."$ENDCOLOR;
+  echo -e $BLUE"Modifying add-apt-repository with $INSTALLPATH/solid-scripts/assets/add-apt-repository in /usr/sbin.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/solid-scripts/assets/add-apt-repository /usr/sbin/add-apt-repository
+  sudo cp $INSTALLPATH/solid-scripts/assets/add-apt-repository /usr/sbin/add-apt-repository
   sudo chmod o+x /usr/sbin/add-apt-repository
   sudo chown root:root /usr/sbin/add-apt-repository
   echo ""
   echo -e $GREEN"Success! Add-Apt-Repository installed."$ENDCOLOR;
-  echo ""
   echo ""
 
 else
@@ -567,22 +572,18 @@ if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
   sudo /usr/sbin/add-apt-repository ppa:noobslab/themes
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
   
   echo -e $BLUE"Adding ppa:alecive/antigone.."$ENDCOLOR;
   echo ""
   sudo /usr/sbin/add-apt-repository ppa:alecive/antigone
   echo ""
-  echo ""
 
   echo -e $GREEN"Success! New themes and icons are now available."$ENDCOLOR;
-  echo ""
   echo ""
 
 else
 
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
   echo ""
 
 fi  
@@ -600,15 +601,12 @@ if [[ $CHAT = "Y" || $CHAT = "y" ]] ; then
   sudo apt update
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
   echo -e $GREEN"Success! Now chat programs like Skype are available."$ENDCOLOR;
-  echo ""
   echo ""
 
 else
        
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
   echo ""
 
 fi
@@ -620,7 +618,7 @@ if [[ $UBUNTU = "Y" || $UBUNTU = "y" ]] ; then
 
   echo -e $BLUE"Adding add-apt-repository-ubuntu.."$ENDCOLOR;
   echo ""
-  sudo cp $HOMEPATH/solid-scripts/assets/add-apt-repository-ubuntu /usr/sbin/add-apt-repository-ubuntu
+  sudo cp $INSTALLPATH/solid-scripts/assets/add-apt-repository-ubuntu /usr/sbin/add-apt-repository-ubuntu
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""  
 
@@ -632,120 +630,120 @@ else
 
 fi
 
-airmon_default="Y"
-read -p "Would you like to modify airmon-ng to create the classic monitor interfaces like mon0 instead of the new style like wlan0mon? [$airmon_default/n] " airmon_default
-airmon=${airmon:-$airmon_default}
+#airmon_default="Y"
+#read -p "Would you like to modify airmon-ng to create the classic monitor interfaces like mon0 instead of the new style like wlan0mon? [$airmon_default/n] " airmon_default
+#airmon=${airmon:-$airmon_default}
 
-if [[ $airmon = "airmon_default" || $airmon = "y" ]] ; then
+#if [[ $airmon = "airmon_default" || $airmon = "y" ]] ; then
 
-  echo ""
-  echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
-  echo ""
-  echo ""
-  sudo apt install --reinstall aircrack-ng
-  echo ""
-  echo ""
-  echo -e $BLUE"Backing up airmon-ng.."$ENDCOLOR;
-  echo ""
+#  echo ""
+#  echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
+#  echo ""
+#  echo ""
+#  sudo apt install --reinstall aircrack-ng
+#  echo ""
+#  echo ""
+#  echo -e $BLUE"Backing up airmon-ng.."$ENDCOLOR;
+#  echo ""
 
-  if [[ ! -e /usr/sbin/airmon-ng-bak ]] ; then 
-    
-    mkdir $HOMEPATH/backup
-    sudo cp /usr/sbin/airmon-ng $HOMEPATH/backup/airmon-ng.backup
+#  if [[ ! -e /usr/sbin/airmon-ng-bak ]] ; then 
+#    
+#    mkdir $HOMEPATH/backup
+#    sudo cp /usr/sbin/airmon-ng $HOMEPATH/backup/airmon-ng.backup
+#
+#    echo -e $GREEN"Done."$ENDCOLOR;
+#    echo ""
+#    echo ""
+#
+#    echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
+#    echo ""
+#    echo ""
+#    sudo cp $INSTALLPATH/solid-scripts/assets/airmon-ng-old /usr/sbin/airmon-ng
+#    sudo chown root:root /usr/sbin/airmon-ng
+#    sudo chmod +x /usr/sbin/airmon-ng
+#    echo -e $GREEN"Done."$ENDCOLOR;
+#    echo ""
+#    echo ""	
+#
+#    echo -e $GREEN"Airmon-ng successfully configured!"$ENDCOLOR;
+#    echo ""
+#    echo ""
+# 
+#  else
 
-    echo -e $GREEN"Done."$ENDCOLOR;
-    echo ""
-    echo ""
+#    echo -e $YELLOW"Maybe later."$ENDCOLOR;
+#    echo ""
+#    echo ""
+#
+#  fi
+#
+#else
 
-    echo -e $BLUE"Modifying airmon-ng.."$ENDCOLOR;
-    echo ""
-    echo ""
-    sudo cp $HOMEPATH/solid-scripts/assets/airmon-ng-old /usr/sbin/airmon-ng
-    sudo chown root:root /usr/sbin/airmon-ng
-    sudo chmod +x /usr/sbin/airmon-ng
-    echo -e $GREEN"Done."$ENDCOLOR;
-    echo ""
-    echo ""	
+#  echo -e $YELLOW"Maybe later."$ENDCOLOR;
+#  echo ""
+#  echo ""
+#
+#fi
 
-    echo -e $GREEN"Airmon-ng successfully configured!"$ENDCOLOR;
-    echo ""
-    echo ""
- 
-  else
+#echo ""
+#screenfetch_default="Y"
+#read -p "Would you like to install screenfetch? [$screenfetch_default,n] " screenfetch_default
+#screenfetch=${screenfetch:-$screenfetch_default}
+#
+#if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
+#
+#  echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
+#  echo ""
+#  sudo apt install bc scrot lsb-release screenfetch -y
+#  echo -e $GREEN"Done."$ENDCOLOR;
+#  echo ""
+#  echo -e $YELLOW"Installing and setting up screenfetch.."$ENDCOLOR;
+#  echo ""
+#  echo ""
+#
+#  if [[ ! -e $HOMEPATH/backup ]] ; then
+#    mkdir -p $HOMEPATH/backup
+#  fi 
 
-    echo -e $YELLOW"Maybe later."$ENDCOLOR;
-    echo ""
-    echo ""
+#  cd $HOMEPATH/backup
+#  echo -e $BLUE"Cloning screenFetch repository .. "$ENDCOLOR;
+#  echo ""
+#  git clone https://github.com/KittyKatt/screenFetch.git  
+#  echo -e $GREEN"Done."$ENDCOLOR;
+#  echo ""
+#  echo ""
+#
+#  echo -e $BLUE"Adding screenfetch to /usr/local/bin.."$ENDCOLOR;
+#  echo ""
+#
+#  if [[ ! -e /usr/local/bin/screenfetch ]] ; then 
+#   
+#    sudo mkdir -p /usr/local/bin	
+#    sudo cp $HOMEPATH/backup/screenFetch/screenfetch-dev /usr/local/bin/screenfetch
+#    echo -e $GREEN"Done."$ENDCOLOR;
+#    echo ""
+#    echo ""
+#
+#    echo -e $YELLOW"Setting as executable in /usr/local/bin.."$ENDCOLOR;
+#    echo ""
+#    sudo chmod +x /usr/local/bin/screenfetch
+#    echo -e $GREEN"Done."$ENDCOLOR;
+#    echo ""
+#    echo ""
+#	
+#  fi
 
-  fi
-
-else
-
-  echo -e $YELLOW"Maybe later."$ENDCOLOR;
-  echo ""
-  echo ""
-
-fi
-
-echo ""
-screenfetch_default="Y"
-read -p "Would you like to install screenfetch? [$screenfetch_default,n] " screenfetch_default
-screenfetch=${screenfetch:-$screenfetch_default}
-
-if [[ $screenfetch = "screenfetch_default" || $screenfetch = "y" ]] ; then
-
-  echo -e $YELLOW"Installing prerequisites.."$ENDCOLOR;
-  echo ""
-  sudo apt install bc scrot lsb-release screenfetch -y
-  echo -e $GREEN"Done."$ENDCOLOR;
-  echo ""
-  echo -e $YELLOW"Installing and setting up screenfetch.."$ENDCOLOR;
-  echo ""
-  echo ""
-
-  if [[ ! -e $HOMEPATH/backup ]] ; then
-    mkdir -p $HOMEPATH/backup
-  fi 
-
-  cd $HOMEPATH/backup
-  echo -e $BLUE"Cloning screenFetch repository .. "$ENDCOLOR;
-  echo ""
-  git clone https://github.com/KittyKatt/screenFetch.git  
-  echo -e $GREEN"Done."$ENDCOLOR;
-  echo ""
-  echo ""
-
-  echo -e $BLUE"Adding screenfetch to /usr/local/bin.."$ENDCOLOR;
-  echo ""
-
-  if [[ ! -e /usr/local/bin/screenfetch ]] ; then 
-   
-    sudo mkdir -p /usr/local/bin	
-    sudo cp $HOMEPATH/backup/screenFetch/screenfetch-dev /usr/local/bin/screenfetch
-    echo -e $GREEN"Done."$ENDCOLOR;
-    echo ""
-    echo ""
-
-    echo -e $YELLOW"Setting as executable in /usr/local/bin.."$ENDCOLOR;
-    echo ""
-    sudo chmod +x /usr/local/bin/screenfetch
-    echo -e $GREEN"Done."$ENDCOLOR;
-    echo ""
-    echo ""
-	
-  fi
-
-  echo -e $GREEN"Screenfetch setup successfully!"$ENDCOLOR;
-  echo ""
-  echo ""
-
-else
-  
-  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
-  echo ""
-
-fi
+#  echo -e $GREEN"Screenfetch setup successfully!"$ENDCOLOR;
+#  echo ""
+#  echo ""
+#
+#else
+#  
+#  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
+#  echo ""
+#  echo ""
+#
+#fi
 java_default="Y"
 read -p "Woud you like to install Java SE? [$java_default,n] " java_default
 java=${java:-$java_default}
@@ -808,15 +806,12 @@ if [[ $java = "java_default" || $java = "y" ]] ; then
   sudo update-alternatives --set mozilla-javaplugin.so /opt/jdk1.7.0_79/jre/lib/amd64/libnpjp2.so
   echo -e $GREEN"Done."$ENDCOLOR;
   echo ""
-  echo ""
   echo -e $GREEN"Success! Java SE JDK Installed."$ENDCOLOR;
-  echo ""
   echo ""
 
 else
 
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
-  echo ""
   echo ""
 
 fi
@@ -856,7 +851,6 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   echo ""
   git clone https://github.com/aanarchyy/wifite-mod-pixiewps.git
   echo ""
-  echo ""
 
   echo -e $BLUE"Cloning reaver-wps-fork-t6x repository"$ENDCOLOR;
   echo ""
@@ -866,8 +860,19 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   echo -e $BLUE"Cloning pixiewps repository"$ENDCOLOR;
   git clone https://github.com/wiire/pixiewps.git
   echo ""
-  echo ""
   
+  echo -e $BLUE"Cloning hcxdumptool repository"$ENDCOLOR;
+  git clone https://github.com/ZerBea/hcxdumptool.git
+  echo ""
+
+  echo -e $BLUE"Cloning hcxtools repository"$ENDCOLOR;
+  git clone https://github.com/ZerBea/hcxtools.git
+  echo ""
+
+  echo -e $BLUE"Cloning hashcat repository"$ENDCOLOR;
+  git clone https://github.com/hashcat/hashcat.git
+  echo ""
+
   up2_default="Y"  
   read -p "Would you like to update and upgrade before installation? [$up2_default,n] " up2_default
   up2=${up2:-$up2_default}
@@ -900,9 +905,9 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
     echo -e $BLUE"Installing prerequisites.."$ENDCOLOR;
     echo ""
+    sudo apt-get build-dep wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev
     sudo apt install wifite reaver pixiewps wpscan libpcap-dev aircrack-ng sqlite3 libsqlite3-dev libssl-dev -y
     echo ""
-    echo ""	
 
   else
 
@@ -913,11 +918,10 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
   echo -e $BLUE"Installing pixiewps.."$ENDCOLOR;
   echo ""
-  cd $HOMEPATH/backup/pixiewps/src/
+  cd $HOMEPATH/backup/pixiewps/
   make
   echo ""
   sudo make install
-  echo ""
   echo ""
 
   echo -e $BLUE"Installing reaver-wps-fork-t6x.."$ENDCOLOR;
@@ -928,18 +932,10 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
   echo ""
   ./configure
   echo ""
-  echo -e $GREEN"Done"$ENDCOLOR;
-  echo ""
-
   echo -e $BLUE"Compiling.."$ENDCOLOR;
-  echo ""
-  echo "" 
   make 
   echo ""
-  echo -e $GREEN"Done"$ENDCOLOR;
-  echo ""
   echo -e $BLUE"Installing .."$ENDCOLOR;
-  echo ""
   echo ""
   sudo make install
   echo ""
@@ -948,19 +944,15 @@ if [[ $wifite = "wifite_default" || $wifite = "y" ]] ; then
 
   echo -e $BLUE"Adding modified wifite and wifite-ng to /usr/bin.."$ENDCOLOR;
   echo ""	
-  sudo cp $HOMEPATH/backup/wifite/wifite.py /usr/bin/wifite
-  sudo chmod +x /usr/bin/wifite
-  sudo cp $HOMEPATH/backup/wifite-mod-pixiewps/wifite-ng /usr/bin/wifite-ng
-  sudo chmod +x /usr/bin/wifite-ng
+  sudo cp $HOMEPATH/backup/wifite/wifite.py /usr/local/bin/wifite-ng
+  sudo chmod +x /usr/local/bin/wifite-ng
   echo ""
  
-  echo -e $BLUE"Patching wfite-ng.."$ENDCOLOR;
-  echo ""
-  sudo cp $HOMEPATH/solid-scripts/assets/wifite-ng-patch /usr/bin/wifite-ng
-  sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite
-  sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite
-  sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/bin/wifite-ng
-  sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/bin/wifite-ng
+  #echo -e $BLUE"Patching wfite-ng.."$ENDCOLOR;
+  #echo ""
+  #sudo cp $INSTALLPATH/solid-scripts/assets/wifite-ng-patch /usr/local/bin/wifite-ng
+  #sudo sed -i 's/usr\/share\/wfuzz\/wordlist\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/usr\/share\/fuzzdb\/wordlists-user-passwd\/passwds\/phpbb.txt/g' /usr/local/bin/wifite-ng
+  #sudo sed -i "s/self.WPA_HANDSHAKE_DIR \= \'hs\'/self.WPA_HANDSHAKE_DIR \= \'\/captures\/hs\'/g" /usr/local/bin/wifite-ng
   echo ""
   echo -e $BLUE"Adding wordlists.."$ENDCOLOR;
   cd /usr/share/
@@ -1085,38 +1077,6 @@ else
 
 fi
 
-htop_default="Y"
-read -p "Would you like to upgrade your htop style? [$htop_default/n] " htop_default
-htop=${htop:-$htop_default}
-
-if [[ $htop = "htop_default" || $htop = "y" ]] ; then
-
-  echo -e $BLUE"Installing htop.."$ENDCOLOR;
-  echo ""
-  sudo apt install htop -y
-  echo ""
-  echo -e $BLUE"Upgrading htop style.."$ENDCOLOR;
-  sudo mkdir -p $HOMEPATH/.config/htop	
-	
-  if [[ ! -e $HOMEPATH/.config/htop ]] ; then
-    
-     sudo mkdir -p $HOMEPATH/.config/htop
-	
-  fi
-  sudo mkdir -p $HOMEPATH/.config/htop/htoprc
-  sudo cp $HOMEPATH/solid-scripts/assets/htoprc $HOMEPATH/.config/htop/htoprc
-  echo ""
-  echo -e $GREEN"Success! Htop style upgraded."$ENDCOLOR;
-  echo ""
-  echo ""
-
-else
-
-  echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR; 
-  echo ""
-
-fi
-
 oui_default="Y"
 read -p "Would you like to update ieee-data? This may take a long time depeding on your system. [$oui_default/n] " oui_default
 oui=${oui:-$oui_default}
@@ -1136,13 +1096,20 @@ else
 
   echo -e $YELLOW"Okay. Maybe later."$ENDCOLOR;
   echo ""
-  echo ""
 
 fi
 
 echo -e $BLUE"Wrapping up the post install with necessary updates.."$ENDCOLOR;
 echo ""
 echo ""
+sudo update-default-aspell
+sudo update-default-ispell
+sudo update-default-wordlist
+sudo update-dictcommon-aspell
+sudo update-dictoommon-hunspell
+sudo update-desktop-database
+sudo update-passwd
+sudo update-cracklib
 
 echo -e $BLUE"[updatedb]"$ENDCOLOR;
 echo ""
@@ -1179,10 +1146,10 @@ sudo update-grub2
 echo -e $BLUE"Syncing.."$ENDCOLOR;
 echo ""
 sync
+rsync
 
 echo ""
 echo -e $GREEN"Wrap up complete."$ENDCOLOR;
-echo ""
 echo ""
 echo -e $BLUE"#################################"$ENDCOLOR;
 echo -e $YELLOW"#      Operation Complete.       #"$ENDCOLOR;
