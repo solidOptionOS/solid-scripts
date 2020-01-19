@@ -23,7 +23,7 @@ echo -e $RED"#################################################################"$
 echo ""
 echo -e $BLUE"Checking for root..."$ENDCOLOR;
 sleep 0.5
-if [ $USER != root ]; then
+if [ $USER !=root ]; then
 echo -e $RED"Sorry, you must run this from as root."$ENDCOLOR
 echo -e $YELLOW"Exiting..."$ENDCOLOR
 exit 0

@@ -1,5 +1,6 @@
 #!/bin/bash
-wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
+cd /root/
+#wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
 
-gpg --keyserver pgpkeys.mit.edu --recv-key  ED444FF07D8D0BF6
-gpg -a --export ED444FF07D8D0BF6 | sudo apt-key add -
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key  165D673674A995B3E64BF0CF4F191A5A8844C542
+gpg -a --export 165D673674A995B3E64BF0CF4F191A5A8844C542 | sudo apt-key add -

@@ -103,12 +103,12 @@ fi
 
 echo -e $BLUE"Adding necessities to /usr/local/bin/"$ENDCOLOR;
 echo ""
-sudo cp $INSTALLPATH/solid-scripts/troubleshoot-networking-issues/restart-network /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/troubleshooting-network-issues/restart-network /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/setup-hostname-new /usr/local/bin
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update
+sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610 /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin/
 echo ""
 echo -e $YELLOW"Complete"$ENDCOLOR;
 echo ""
@@ -577,6 +577,22 @@ if [[ $CUSTOMTHEMES = "CUSTOMTHEMES_DEFAULT" || $CUSTOMTHEMES = "y" ]] ; then
   echo ""
   sudo /usr/sbin/add-apt-repository ppa:alecive/antigone
   echo ""
+  echo -e $BLUE"Adding new keys.."$ENDCOLOR;
+  echo ""
+  gpg --keyserver keys.gnupg.net --recv 886DDD89
+  gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+
+  gpg --keyserver keys.gnupg.net --recv F0B5D826
+  gpg --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add -
+
+  gpg --keyserver keys.gnupg.net --recv E06E6293
+  gpg --export DED04C8CBB517AE45B073F12A5D712AEE06E6293 | sudo apt-key add -
+
+  gpg --keyserver keys.gnupg.net --recv F59EAE4D
+  gpg --export 4FA44A478284A18C1BA4A9CAD530E028F59EAE4D | sudo apt-key add -
+
+  gpg --keyserver keys.gnupg.net --recv F0B5D826
+  gpg --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add -
 
   echo -e $GREEN"Success! New themes and icons are now available."$ENDCOLOR;
   echo ""

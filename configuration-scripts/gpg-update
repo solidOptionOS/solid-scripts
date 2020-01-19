@@ -1,14 +1,16 @@
 #!/bin/bash
-wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
 
-sleep 10
-wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2018.1_all.deb
-apt install ./kali-archive-keyring_2018.1_all.deb
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 165D673674A995B3E64BF0CF4F191A5A8844C542
+gpg -a --export 165D673674A995B3E64BF0CF4F191A5A8844C542 | sudo apt-key add -
 
-gpg --keyserver keys.gnupg.net --recv 886DDD89
-gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+#sudo apt-key adv --keyserver keyserver.ubuntu,com --recv F0B5D826
+#gpg -a --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add - 
 
-gpg --keyserver keys.gnupg.net --recv F0B5D826
-gpg --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add - 
-gpg --keyserver keys.gnupg.net --recv E06E6293
-gpg --export DED04C8CBB517AE45B073F12A5D712AEE06E6293 | sudo apt-key add - 
+#sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E06E6293 
+#gpg -a --export DED04C8CBB517AE45B073F12A5D712AEE06E6293 | sudo apt-key add - 
+
+#sudo apt-key adv --keyserver keyserver.ubuntu.com --recv F59EAE4D
+#gpg -a --export 4FA44A478284A18C1BA4A9CAD530E028F59EAE4D | sudo apt-key add - 
+
+#sudo apt-key adv --keyserver keyserver.ubuntu.com --recv F0B5D826
+#gpg -a --export 4FF2E40CEC39A57852C12BAF77589CABF0B5D826 | sudo apt-key add -
