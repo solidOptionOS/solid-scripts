@@ -103,12 +103,20 @@ fi
 
 echo -e $BLUE"Adding necessities to /usr/local/bin/"$ENDCOLOR;
 echo ""
+<<<<<<< HEAD
 sudo cp $INSTALLPATH/solid-scripts/troubleshooting-network-issues/restart-network /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610 /usr/local/bin/
 sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin/
+=======
+sudo cp $INSTALLPATH/solid-scripts/troubleshoot-network-issues/restart-network /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
+sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin
+sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin
+>>>>>>> 699836bf9896e549a3c781949077c1cebeaf4a54
 echo ""
 echo -e $YELLOW"Complete"$ENDCOLOR;
 echo ""
@@ -381,13 +389,13 @@ if [[ $extra = "extra_default" || $extra = "y" ]] ; then
   
   echo -e $BLUE"Installing lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data"$ENDCOLOR; 
   echo ""
-  sudo apt-get build-dep lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
+  sudo apt-get build-dep lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
   echo ""
-  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-common ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
+  sudo apt install lshw bash-completion xclip arduino lsof usbutils alsa-utils rtl-sdr rtlsdr-scanner pixiewps reaver wireshark adb fern-wifi-cracker tor cowpatty pyrit live-build metasploit-framework ghc cabal-install cabal-debian shellcheck ettercap-graphical nmap thc-ipv6 thc-pptp-bruter thc-ssl-dos putty putty-tools putty-doc netcat kismet ieee-data unrar unace p7zip zip unzip p7zip-full p7zip-rar file-roller filezilla filezilla-common gtk-recordmydesktop recordmydesktop remmina htop tor nethogs gdebi  scrot lsb-release gcc g++ build-essential kbuild cmake make kbuild locate aptitude bully pixiewps reaver wireshark-common wireshark-dev wireshark-gtk kismet-plugins screenfetch git-all libssl-dev opencl-headers hashcat-data 
   echo ""
   echo -e $BLUE"Installing firmware-atheros firmware-realtek firmware-ath9k-htc firmware-ralink"$ENDCOLOR;
-  sudo apt-get build-dep firmware-atheros firmware-realtek firmware-ath9k-htc firmware-ralink 
-  sudo apt-get install firmware-atheros firmeare-realtek firmware-ath9k-htc firmware-ralink
+  sudo apt-get build-dep firmware-atheros  firmware-ath9k-htc firmware-ralink 
+  sudo apt-get install firmware-atheros firmware-ath9k-htc firmware-ralink
   echo ""
   echo -e $BLUE"Installing exfat-fuse exfat-utils f2fs-tools hfsutils hfsprogs jfsutils hfsplus  hfst-ospell hfst-ospell-dev util-linux util-linux-locales cryptcat crypt++el cryptol cryptsetup cryptsetup-bin cryptsetup-initramfs dmsetup nilfs-tools ntfs-3g ntfs-3g-dev reiser4progs reiserfsprogs udfclient  xfsprogs xfsdump lvm2 lvm2-dbusd luksipc btrfs-progs btrfsmaintenance btrfs-compsize btrfs-heatmap btrfs-compsize gpart gparted libreadline-gplv2-dev"$ENDCOLOR; 
   echo ""

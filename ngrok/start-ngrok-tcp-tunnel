@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "";
+echo "Starting Ngrok TCP Tunnel..";
+ngrok tcp 4444 --remote-addr 1.tcp.ngrok.io:26414

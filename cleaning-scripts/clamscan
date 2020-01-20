@@ -1,0 +1,5 @@
+#!/bin/bash
+
+clamscan -v --tempdir=/tmp/clamd/ --gen-json=yes --database=/var/lib/clamav/  -r --copy=/clamav-quarentine/  -l /var/log/clamav/clamscan.log  --disable-cache
+
+
