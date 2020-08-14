@@ -101,25 +101,25 @@ else
 
 fi
 
-echo -e $BLUE"Adding necessities to /usr/local/bin/"$ENDCOLOR;
-echo ""
-<<<<<<< HEAD
-sudo cp $INSTALLPATH/solid-scripts/troubleshooting-network-issues/restart-network /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610 /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin/
-=======
-sudo cp $INSTALLPATH/solid-scripts/troubleshoot-network-issues/restart-network /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
-sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin
-sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin
->>>>>>> 699836bf9896e549a3c781949077c1cebeaf4a54
-echo ""
-echo -e $YELLOW"Complete"$ENDCOLOR;
-echo ""
+#echo -e $BLUE"Adding necessities to /usr/local/bin/"$ENDCOLOR;
+#echo ""
+#<<<<<<< HEAD
+#sudo cp $INSTALLPATH/solid-scripts/troubleshooting-network-issues/restart-network /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/install-mt7610 /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin/
+#=======
+#sudo cp $INSTALLPATH/solid-scripts/troubleshoot-network-issues/restart-network /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/cleaning-scripts/clear-cache /usr/local/bin/
+#sudo cp $INSTALLPATH/solid-scripts/update-helper-scripts/solid-update
+#sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/set-hostname-new /usr/local/bin
+#sudo cp $INSTALLPATH/solid-scripts/configuration-scripts/gpg-update /usr/local/bin
+#>>>>>>> 699836bf9896e549a3c781949077c1cebeaf4a54
+#echo ""
+#echo -e $YELLOW"Complete"$ENDCOLOR;
+#echo ""
 
 #aliases_default="Y"
 #read -p "Do you want to add custom alias to your bashrc? [$aliases_default/n] " aliases_default
