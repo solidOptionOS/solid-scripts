@@ -3,7 +3,7 @@ echo ""
 echo "dropping caches.."
 echo ""
 echo "sync; echo 1 > /proc/sys/vm/drop_caches"
-sync; echo 1 > /proc/sys/vm/drop_caches
+sudo sync; echo 1 > /proc/sys/vm/drop_caches
 echo ""
 sleep 1
 echo "Complete"
@@ -12,7 +12,7 @@ sleep 1
 echo "clear dentries and ..."
 echo ""
 echo "sync; echo 2 > /proc/sys/vm/drop_caches"
-sync; echo 2 > /proc/sys/vm/drop_caches
+sudo sync; echo 2 > /proc/sys/vm/drop_caches
 echo ""
 sleep 1
 echo "Complete"
@@ -21,7 +21,7 @@ sleep 1
 echo "clear more shit.."
 echo ""
 echo "sync; echo 3 > /proc/sys/vm/drop_caches "
-sync; echo 3 > /proc/sys/vm/drop_caches 
+sudo sync; echo 3 > /proc/sys/vm/drop_caches 
 echo ""
 echo "Complete"
 echo ""
